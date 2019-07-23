@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node ./dist",
     "watch": "tsc-watch --onSuccess \"node ./dist\"",
-    "dev": "nodemon ./dist"
+    "dev": "nodemon ./dist",
+    "raml": "raml2html -i doc/api/api.raml -o api.html"
   },
   "dependencies": {
     "koa": "2.7.0",
@@ -32,6 +33,7 @@
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-prettier": "3.1.0",
     "nodemon": "1.19.1",
+    "raml2html": "7.1.0",
     "ts-node": "8.3.0",
     "tsc-watch": "2.2.1",
     "typescript": "3.5.2"
