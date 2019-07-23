@@ -2,10 +2,11 @@
   "name": "sss",
   "version": "0.1.0",
   "description": "Simple Sendsheet Server",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "postinstall": "npm run build",
     "start": "node ./dist",
     "watch": "tsc-watch --onSuccess \"node ./dist\"",
     "dev": "nodemon ./dist",
