@@ -13,6 +13,9 @@
     "raml": "raml2html -i doc/api/api.raml -o api.html",
     "knex": "knex --knexfile ./config/knexfile.js"
   },
+  "engines": {
+    "node": "10.x"
+  },
   "dependencies": {
     "@hapi/boom": "7.4.2",
     "@hapi/joi": "15.1.0",
