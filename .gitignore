@@ -72,6 +72,3 @@ docs/
 # idea directory
 .idea/**
 **/*.iml
-
-
-dist/**
