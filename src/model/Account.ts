@@ -5,6 +5,8 @@ import {
   AccountModel,
   getAccountForUser
 } from '../queries/account'
+import { Credential, credentialModelToCredential } from './Credential'
+import { getCredentialsForUser } from '../queries/credential';
 
 
 /**
@@ -37,5 +39,27 @@ export async function accountForUser(username: string): Promise<SomeResult<Accou
     Logger.error(err);
     return makeError(err.message)
   }
+}
 
+
+/**
+ * @function credentialsForUser
+ * @description Get the saved credentials for the user
+ * 
+ */
+export async function credentialsForUser(username: string): Promise<SomeResult<Credential[]>> {
+  try {
+    const credentialModels = await getCredentialsForUser(username)
+    if (!credentialModels) {
+      throw new Error(`No credentials found for username: ${username}`)
+    }
+
+    console.log('credentialModels', credentialModels)
+
+    const credentials = credentialModels.map(i => credentialModelToCredential(i))
+    return makeSuccess(credentials)
+  } catch (err) {
+    Logger.error(err);
+    return makeError(err.message)
+  }
 }

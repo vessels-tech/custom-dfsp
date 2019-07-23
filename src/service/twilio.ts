@@ -2,8 +2,9 @@
 // const authToken = 'your_auth_token';
 // const client = require('twilio')(accountSid, authToken);
 
-import {Twilio as TwilioClient} from 'twilio'
-import { makeSuccess, makeError, SomeResult } from 'util/AppProviderTypes';
+import { Twilio as TwilioClient } from 'twilio'
+
+import { makeSuccess, makeError, SomeResult } from '../util/AppProviderTypes';
 
 // client.messages
 //   .create({
@@ -20,7 +21,7 @@ class Twilio {
     this.client = new TwilioClient(accountSid, authToken)
   }
 
-  async sendMessage(from: string, to: string, message: string): Promise<SomeResult<string>> {
+  async sendMessage(from: string, to: string, message: string): Promise<SomeResult<object>> {
     return this.client.messages.create({
       body: message,
       from,
