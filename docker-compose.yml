@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:11.4-alpine
+    container_name: s4_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: s4
