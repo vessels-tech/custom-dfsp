@@ -9,4 +9,4 @@ const healthCheckRouter = new koaRouter()
   .get('/', shallow)
   // .get('/deep', deep);
 
-module.exports = { healthCheckRouter };
+export { healthCheckRouter };
