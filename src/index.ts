@@ -13,6 +13,7 @@ const koa404Handler = require('koa-404-handler');
 import { rootRouter } from './routes/root.routes'
 import { healthCheckRouter } from './routes/healthCheck/healthCheck.routes'
 import { adminRouter } from './routes/admin/admin.routes'
+import { smsRouter } from './routes/sms/sms.routes'
 import Config from './service/config';
 import Logger from './service/logger';
 
@@ -25,6 +26,7 @@ api
   .use('/', rootRouter.routes())
   .use('/health', healthCheckRouter.routes())
   .use('/admin', adminRouter.routes())
+  .use('/sms', smsRouter.routes())
 
 /* Override Koa's Error Handler*/
 app.context.onerror = errorHandler;
