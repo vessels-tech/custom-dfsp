@@ -1,7 +1,7 @@
 
 exports.seed = async function(knex) {
-  await knex('account').del()
   await knex('credential').del()
+  await knex('account').del()
 
   // Inserts seed entries
   await knex('account').insert([
@@ -15,8 +15,8 @@ exports.seed = async function(knex) {
   await knex('credential').insert([{ 
     type: 'TWILIO',
     account_id,
-    twilio_account_sid: '123456',
-    twilio_access_token: '7891011',
+    twilio_account_sid: 'ACb098d653b93dbac6f87acb5ea8fc76d9',
+    twilio_access_token: process.env.TWILIO_AUTH_TOKEN,
     friendly_name: 'TZChatbot twilio',
   }]);
 };

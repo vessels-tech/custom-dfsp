@@ -1,4 +1,3 @@
-
 export type SomeResult<T> = ErrorResult | SuccessResult<T>;
 
 export type SuccessResult<T> = {
@@ -47,6 +46,7 @@ export function isError(result: SomeResult<any>) {
  */
 export function unsafeUnwrap<T>(result: SomeResult<T>): T {
   if (result.type === ResultType.ERROR) {
+    console.log("UNSAFELY UNWRAPPING STUFF!", result.message)
     throw new Error(result.message);
   }
 
