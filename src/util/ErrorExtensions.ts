@@ -17,8 +17,14 @@ export function unsafeUnwrapBoom<T>(result: SomeResult<T>): T {
   try {
     return unsafeUnwrap(result)
   } catch (err) {
+    
     console.log("Hitting boom!", err.message)
     Logger.error(err)
-    throw Boom.internal(err.message)
+
+    const boomError = Boom.internal(err.message, err)
+    //TODO: figure out how to actually pass through the error message
+    // @ts-ignore
+    boomError.output.payload['message'] = err.message
+    throw boomError;
   }
 }
