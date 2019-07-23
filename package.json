@@ -21,6 +21,7 @@
     "koa-helmet": "4.0.0",
     "koa-morgan": "1.0.1",
     "koa-router": "7.4.0",
+    "rc": "^1.2.8",
     "winston": "3.2.1"
   },
   "devDependencies": {
@@ -30,6 +31,7 @@
     "@types/koa-helmet": "3.1.2",
     "@types/koa-morgan": "1.0.4",
     "@types/koa-router": "7.0.42",
+    "@types/rc": "^1.1.0",
     "@types/winston": "2.4.4",
     "@typescript-eslint/eslint-plugin": "1.11.0",
     "@typescript-eslint/parser": "1.11.0",

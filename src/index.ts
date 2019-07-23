@@ -8,7 +8,8 @@ import morgan from 'koa-morgan'
 
 import { rootRouter } from './routes/root.routes'
 import { healthCheckRouter } from './routes/healthCheck/healthCheck.routes'
-// import errorResponder from './middleware/errorResponder';
+import Config from './service/config';
+import Logger from './service/logger';
 
 //TODO: find/write types for these
 const errorHandler = require('koa-better-error-handler');
@@ -36,4 +37,6 @@ app
   .use(koa404Handler)
   
 /* Start the Server */
-app.listen(3000);
+app.listen(Config.PORT, () => {
+  Logger.warn(`Server running at: ${Config.HOSTNAME}:${Config.PORT}`)
+});
