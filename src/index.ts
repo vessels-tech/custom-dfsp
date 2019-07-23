@@ -6,14 +6,16 @@ import koaConvert from 'koa-convert'
 import helmet from 'koa-helmet'
 import morgan from 'koa-morgan'
 
-import { rootRouter } from './routes/root.routes'
-import { healthCheckRouter } from './routes/healthCheck/healthCheck.routes'
-import Config from './service/config';
-import Logger from './service/logger';
-
 //TODO: find/write types for these
 const errorHandler = require('koa-better-error-handler');
 const koa404Handler = require('koa-404-handler');
+
+import { rootRouter } from './routes/root.routes'
+import { healthCheckRouter } from './routes/healthCheck/healthCheck.routes'
+import { adminRouter } from './routes/admin/admin.routes'
+import Config from './service/config';
+import Logger from './service/logger';
+
 
 const app = new Koa();
 const api = new KoaRouter()
@@ -22,6 +24,7 @@ const api = new KoaRouter()
 api
   .use('/', rootRouter.routes())
   .use('/health', healthCheckRouter.routes())
+  .use('/admin', adminRouter.routes())
 
 /* Override Koa's Error Handler*/
 app.context.onerror = errorHandler;
