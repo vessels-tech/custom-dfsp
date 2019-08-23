@@ -19,3 +19,14 @@ rollback:
 # production!
 seed:
 	yarn knex -- seed:run --env development
+
+
+build:
+	npm run build
+
+
+watch:
+	npm run watch
+
+dev:
+	DFSP_PORT=4999 npm run dev
