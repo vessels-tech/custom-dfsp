@@ -6,7 +6,6 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "postinstall": "npm run build",
     "start": "node ./dist",
     "watch": "tsc-watch --onSuccess \"node ./dist\"",
     "dev": "nodemon ./dist",
@@ -28,6 +27,7 @@
     "koa-helmet": "4.0.0",
     "koa-joi-validate": "0.5.1",
     "koa-morgan": "1.0.1",
+    "koa-openapi": "3.13.5",
     "koa-router": "7.4.0",
     "pg": "7.11.0",
     "rc": "1.2.8",
