@@ -1,8 +1,8 @@
 import rc from 'rc'
 const configFile = require('../../config/default.json')
 
-/* Override variables by setting env vars with the prefix SSS_ */
-const PREFIX = "SSS"
+/* Override variables by setting env vars with the prefix DFSP_ */
+const PREFIX = "DFSP"
 const RC = rc(PREFIX, configFile)
 
 const Config = {

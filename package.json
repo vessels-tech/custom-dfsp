@@ -1,7 +1,7 @@
 {
-  "name": "sss",
+  "name": "custom-dfsp",
   "version": "0.1.0",
-  "description": "Simple Sendsheet Server",
+  "description": "custom-dfsp",
   "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {
