@@ -10,6 +10,7 @@ export type ParticipantsResponse = {
   fspId: String
 }
 
+//This doesn't match up with the other Inbound api P
 export type TransferParty = {
   idType: IdType,
   idValue: IdValue,
@@ -20,6 +21,27 @@ export type TransferParty = {
   dateOfBirth?: String, //Date of birth in the form YYYY-MM-DD.
   merchantClassificationCode?: String,
 }
+
+//This is incorrect with the spec, but is required by the scheme adapter inbound api
+export type Party = {
+  partyIdInfo: {
+    partyIdType: IdType
+    partyIdentifier: String,
+    partySubIdOrType?: String,
+    fspId: String,
+  },
+  merchantClassificationCode?: String,
+  name: String,
+  personalInfo: {
+    complexName: {
+      firstName?: String,
+      middleName?: String,
+      lastName?: String,
+    },
+    dateOfBirth: String
+  }
+}
+
 
 //A Mojaloop API quote identifier(UUID).
 export type QuoteId = String

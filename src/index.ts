@@ -12,7 +12,7 @@ const koa404Handler = require('koa-404-handler');
 
 import { healthCheckRouter } from './routes/healthCheck/healthCheck.routes'
 import { mmRouter } from './routes/mm/mm.routes'
-import { inboundRouter } from './routes/inbound/inbound.routes'
+import adapterRouter  from './routes/adapter/adapter.routes'
 import Config from './service/config';
 import Logger from './service/logger';
 
@@ -24,7 +24,7 @@ const api = new KoaRouter()
 api
   .use('/health', healthCheckRouter.routes())
   .use('/mm', mmRouter.routes()) //Temp mobile money api test
-  .use('/inbound', inboundRouter.routes()) //handle callbacks from the scheme-adapter
+  .use('/adapter', adapterRouter.routes()) //handle callbacks from the scheme-adapter
 
 /* Override Koa's Error Handler*/
 app.context.onerror = errorHandler;
