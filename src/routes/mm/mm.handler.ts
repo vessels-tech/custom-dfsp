@@ -8,6 +8,24 @@ import {
   Party,
 } from '../../model/InboundApiTypes'
 
+import request from 'request-promise-native'
+
+/**
+ * Utility method to build a set of headers required by the SDK outbound API
+ *
+ * @returns {object} - Object containing key/value pairs of HTTP headers
+ */
+const buildHeaders = () => {
+  let headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Date': new Date().toUTCString(),
+    'fspiop-source': Config.DFSP_ID,
+  };
+
+  return headers;
+};
+
 //TODO: I still feel like I have this the wrong way around...
 
 /**
@@ -71,8 +89,37 @@ export async function lookupAccount(ctx: Context) {
  * @param ctx 
  */
 export async function transfer(ctx: Context) {
+  
+  //Send the transfer to the scheme adapter to take care of
+  //This seems to just be forwarding it straight onto the switch
+  //The scheme adapter isn't doing anything for us here...
+  const options = {
+    url: 'http://localhost:4001/transfers', //The DFSP outbound (ie. out of the dfsp to the switch)
+    method: 'POST',
+    json: true,
+    headers: buildHeaders(),
+    body: {
+      "from": {
+        "displayName": "John Doe",
+        "idType": "MSISDN",
+        "idValue": "123456789"
+      },
+      "to": {
+          "idType": "MSISDN",
+          "idValue": "987654321"
+      },
+      "amountType": "SEND",
+      "currency": "USD",
+      "amount": "100",
+      "transactionType": "TRANSFER",
+      "note": "test payment",
+      "homeTransactionId": "123ABC"
 
+    }
 
+  }
+  const result = await request(options)
+  console.log("result is", result);
 
   ctx.body = true;
 }

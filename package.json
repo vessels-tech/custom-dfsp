@@ -32,8 +32,12 @@
     "koa-router": "7.4.0",
     "pg": "7.11.0",
     "rc": "1.2.8",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "request-promise-native": "^1.0.7",
     "tslib": "1.10.0",
     "twilio": "3.33.1",
+    "uuid": "^3.3.3",
     "winston": "3.2.1"
   },
   "devDependencies": {
@@ -45,6 +49,7 @@
     "@types/koa-morgan": "1.0.4",
     "@types/koa-router": "7.0.42",
     "@types/rc": "1.1.0",
+    "@types/request-promise-native": "^1.0.16",
     "@types/twilio": "0.0.10",
     "@types/winston": "2.4.4",
     "@typescript-eslint/eslint-plugin": "1.11.0",
