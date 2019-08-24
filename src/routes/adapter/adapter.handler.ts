@@ -25,11 +25,13 @@ export async function getParticipants(ctx: Context) {
 }
 
 export async function getParties(ctx: Context) {
-  //Temp mock response
+  //Temp mock 404 response
   const response: TransferParty = {
     idType: IdType.MSISDN,
     idValue: "+61404404404"
   }
+
+
 
   ctx.body = response;
 }
