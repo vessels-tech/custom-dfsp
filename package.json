@@ -18,6 +18,7 @@
   "dependencies": {
     "@hapi/boom": "7.4.2",
     "@hapi/joi": "15.1.0",
+    "@modusbox/mojaloop-sdk-standard-components": "^0.0.39",
     "knex": "0.19.0",
     "koa": "2.7.0",
     "koa-404-handler": "0.0.2",
