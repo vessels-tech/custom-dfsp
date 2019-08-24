@@ -10,11 +10,9 @@ import morgan from 'koa-morgan'
 const errorHandler = require('koa-better-error-handler');
 const koa404Handler = require('koa-404-handler');
 
-// import { rootRouter } from './routes/root.routes'
 import { healthCheckRouter } from './routes/healthCheck/healthCheck.routes'
+import { mmRouter } from './routes/mm/mm.routes'
 import { inboundRouter } from './routes/inbound/inbound.routes'
-// import { adminRouter } from './routes/admin/admin.routes'
-// import { smsRouter } from './routes/sms/sms.routes'
 import Config from './service/config';
 import Logger from './service/logger';
 
@@ -25,12 +23,8 @@ const api = new KoaRouter()
 
 api
   .use('/health', healthCheckRouter.routes())
-  .use('/inbound', inboundRouter.routes())
-
-  // .use('/inbound', inboundApiRouter)
-//   .use('/', rootRouter.routes())
-//   .use('/admin', adminRouter.routes())
-//   .use('/sms', smsRouter.routes())
+  .use('/mm', mmRouter.routes()) //Temp mobile money api test
+  .use('/inbound', inboundRouter.routes()) //handle callbacks from the scheme-adapter
 
 /* Override Koa's Error Handler*/
 app.context.onerror = errorHandler;

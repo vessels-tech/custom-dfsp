@@ -29,4 +29,4 @@ watch:
 	npm run watch
 
 dev:
-	DFSP_PORT=4999 npm run dev
+	npm run dev
