@@ -109,7 +109,7 @@ export async function transfer(ctx: Context) {
           "idValue": "987654321"
       },
       "amountType": "SEND",
-      "currency": "USD",
+      "currency": "AUD",
       "amount": "100",
       "transactionType": "TRANSFER",
       "note": "test payment",
