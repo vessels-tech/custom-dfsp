@@ -3,7 +3,7 @@ import { Context } from 'koa'
 import { 
   ParticipantsResponse, 
   TransferParty, 
-  IdType, 
+  // IdType, 
   QuoteResponse, 
   Currency, 
   TransferResponse 
@@ -25,17 +25,20 @@ export async function getParticipants(ctx: Context) {
 }
 
 export async function getParties(ctx: Context) {
+  const { idType, idValue } = ctx.params;
 
+  //For now this just mocks out and 'pretends' to have any party that it is asked for.
   const response: TransferParty = {
-    idType: IdType.MSISDN,
-    idValue: "61404404404"
+    idType,
+    idValue,
   }
 
   ctx.body = response;
 }
 
 export async function postQuoteRequests(ctx: Context) {
-  //TODO: parse the quote request with a fixed rate...
+  //TODO: this is where we got up to! we need to do *something* with the quoteRequest we get back from the scheme adapter
+
 
   //Temp mock response
   const response: QuoteResponse = {
