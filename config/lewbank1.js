@@ -5,7 +5,7 @@ const config = {
   // "DFSP_ID": "mojaloop-sdk",
   // "PEER_ENDPOINT": "localhost:3000",
   // "PEER_ENDPOINT": "ml-api-adapter.moja-box.vessels.tech",
-  "PEER_ENDPOINT": "localhost:4000",
+  "PEER_ENDPOINT": "scheme-adapter:4000",
   "TLS": {
     "mutualTLS": {
       "enabled": false
