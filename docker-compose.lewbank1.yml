@@ -22,7 +22,13 @@ services:
       context: ./
     volumes:
       - ./src:/opt/custom-dfsp/src
+      - ./config:/opt/custom-dfsp/config
+      - ./package.json:/opt/custom-dfsp/package.json
+      - ./tsconfig.json:/opt/custom-dfsp/tsconfig.json
+    ports:
+      - "4999:4999"
     depends_on:
       - scheme-adapter
     command:
       - npm run watch
+      # - "tail -f /dev/null"
