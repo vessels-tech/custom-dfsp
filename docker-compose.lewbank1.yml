@@ -4,21 +4,18 @@ services:
     image: "redis:5.0.4-alpine"
 
   scheme-adapter:
-    # image: node:10.15.3-alpine
-    # image: "mojaloop/sdk-scheme-adapter:latest"
     build:
       context: ../sdk-scheme-adapter
     env_file: ./config/scheme-adapter.lewbank1.env
     volumes:
+      - ../sdk-scheme-adapter/package.json:/opt/sdk-scheme-adapter/package.json
       - ../sdk-scheme-adapter/src:/opt/sdk-scheme-adapter/src
     ports:
       - "4000:4000"
     depends_on:
       - redis
     command:
-      - sh
-      - -c
-      - cd /opt/src && npm run docker-dev
+      - npm run docker-dev
   
   custom-dfsp:
     image: node:10.15.3-alpine
