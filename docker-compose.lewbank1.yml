@@ -18,13 +18,11 @@ services:
       - npm run docker-dev
   
   custom-dfsp:
-    image: node:10.15.3-alpine
+    build:
+      context: ./
     volumes:
-      - ./src:/opt/src
-      - ./node_modules:/opt/node_modules
+      - ./src:/opt/custom-dfsp/src
     depends_on:
       - scheme-adapter
     command:
-      - sh
-      - -c
-      - cd /opt/src && npm run docker-dev
+      - npm run watch
