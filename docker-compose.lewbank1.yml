@@ -18,13 +18,16 @@ services:
       - npm run docker-dev
   
   custom-dfsp:
-    image: node:10.15.3-alpine
+    build:
+      context: .
+    # image: node:10.15.3-alpine
     volumes:
-      - ./src:/opt/src
-      - ./node_modules:/opt/node_modules
+      # TODO: there are probably better ways to set the config.
+      - ./config/lewbank1.js:/opt/custom-dfsp/config/default.js
+      - ./src:/opt/custom-dfsp/src
+      - ./node_modules:/opt/custom-dfsp/node_modules
+      - ./tsconfig.json:/opt/custom-dfsp/tsconfig.json
     depends_on:
       - scheme-adapter
     command:
-      - sh
-      - -c
-      - cd /opt/src && npm run docker-dev
+      - npm run docker-dev
