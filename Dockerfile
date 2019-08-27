@@ -14,6 +14,5 @@ RUN mkdir -p /opt/custom-dfsp/config
 COPY src /opt/custom-dfsp/src
 COPY secrets /opt/custom-dfsp/secrets
 
-EXPOSE 4000
 CMD ["npm", "run", "start"]
 ENTRYPOINT [ "sh", "-c" ]
