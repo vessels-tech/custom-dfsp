@@ -10,8 +10,6 @@ services:
     volumes:
       - ../sdk-scheme-adapter/package.json:/opt/sdk-scheme-adapter/package.json
       - ../sdk-scheme-adapter/src:/opt/sdk-scheme-adapter/src
-    ports:
-      - "4000:4000"
     depends_on:
       - redis
     command:
