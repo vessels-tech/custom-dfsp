@@ -10,6 +10,7 @@ COPY package.json package-lock.json* /opt/custom-dfsp/
 RUN npm install
 
 COPY src /opt/custom-dfsp/src
+COPY dist /opt/custom-dfsp/dist
 COPY secrets /opt/custom-dfsp/secrets
 
 EXPOSE 4000
