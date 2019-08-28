@@ -9,7 +9,7 @@ import {
 
 const adminRouter = new KoaRouter()
 adminRouter.get('/accounts', getAccounts);
-adminRouter.post('/cashin', cashIn) //add funds to user's account
+adminRouter.post('/cashin/:idType/:idValue', cashIn) //add funds to user's account
 adminRouter.get('/position', getPosition) //get the position of the dfsp
 
 export {
