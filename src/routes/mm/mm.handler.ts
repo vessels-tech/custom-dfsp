@@ -3,7 +3,6 @@ import { Context } from 'koa'
 import mlClient from '../../service/mlClient'
 import Config from '../../service/config'
 import { 
-  ParticipantsResponse, 
   IdType,
   Party,
 } from '../../model/InboundApiTypes'
@@ -27,6 +26,12 @@ const buildHeaders = () => {
 };
 
 //TODO: I still feel like I have this the wrong way around...
+
+
+export async function getAccount(ctx: Context) {
+  ctx.body = true
+}
+
 
 /**
  * @function registerAccount
@@ -60,27 +65,6 @@ export async function registerAccount(ctx: Context) {
   ctx.body = true
 }
 
-export async function lookupAccount(ctx: Context) {
-  //TODO: lookup an account given a phone number by calling through to the ALS
-
-  //TODO: wrap this with some nice error handling that passes on errors
-  //TODO: wrap this with our nice inline error handling inspired by rust
-  // try {
-  const getPartiesResponse = await mlClient.getParties(IdType.MSISDN, "+61404404404")
-  console.log('getPartiesResponse', getPartiesResponse)
-  // } catch (err) {
-  //   console.log('err is', err)
-  //   throw err
-  // }
-
-  //Temp mock response
-  const response: ParticipantsResponse = {
-    fspId: 'glasper'
-  }
-
-  ctx.body = response
-}
-
 
 /**
  * @function transfer
@@ -89,7 +73,14 @@ export async function lookupAccount(ctx: Context) {
  * @param ctx 
  */
 export async function transfer(ctx: Context) {
+
+  /*
+    TODO internally:
+    - check that the user exists
+    - check that the user has enough funds for the tx
   
+  */
+
   //Send the transfer to the scheme adapter to take care of
   //This seems to just be forwarding it straight onto the switch
   //The scheme adapter isn't doing anything for us here...
@@ -121,6 +112,9 @@ export async function transfer(ctx: Context) {
 
   try {
     await request(options)
+
+    //If this succeeds, deduct from the user's account? Is that how this works?
+
     ctx.response.status = 200;
     ctx.response.body = {processed: true}
 
