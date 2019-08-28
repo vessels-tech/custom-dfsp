@@ -20,13 +20,14 @@ services:
       context: .
     # image: node:10.15.3-alpine
     volumes:
-      # TODO: there are probably better ways to set the config.
-      - ./config/lewbank1.js:/opt/custom-dfsp/config/default.js
+      - ./package.json:/opt/custom-dfsp/package.json
+      - ./tsconfig.json:/opt/custom-dfsp/tsconfig.json
+      - ./config:/opt/custom-dfsp/config
       - ./src:/opt/custom-dfsp/src
       - ./node_modules:/opt/custom-dfsp/node_modules
-      - ./tsconfig.json:/opt/custom-dfsp/tsconfig.json
     depends_on:
       - scheme-adapter
     command:
       - npm run watch
+      # - npm run watch-ts-node
       # - "tail -f /dev/null"

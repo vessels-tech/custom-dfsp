@@ -93,8 +93,9 @@ export async function transfer(ctx: Context) {
   //Send the transfer to the scheme adapter to take care of
   //This seems to just be forwarding it straight onto the switch
   //The scheme adapter isn't doing anything for us here...
+
   const options = {
-    url: 'http://localhost:4001/transfers', //The DFSP outbound (ie. out of the dfsp to the switch)
+    url: `http://${Config.SCHEME_ADAPTER_ENDPOINT}/transfers`,
     method: 'POST',
     json: true,
     headers: buildHeaders(),
@@ -113,13 +114,21 @@ export async function transfer(ctx: Context) {
       "amount": "100",
       "transactionType": "TRANSFER",
       "note": "test payment",
-      "homeTransactionId": "123ABC"
-
+      "homeTransactionId": "123ABC",
     }
-
   }
-  const result = await request(options)
-  console.log("result is", result);
+  console.log("executing POST", options.url)
 
-  ctx.body = true;
+  try {
+    await request(options)
+    ctx.response.status = 200;
+    ctx.response.body = {processed: true}
+
+  } catch (err) {
+    
+    ctx.response.status = 500;
+    ctx.response.body = {
+      message: err.message || 'Unspecified error'
+    };
+  }
 }
