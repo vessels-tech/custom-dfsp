@@ -1,0 +1,17 @@
+#env specific config. Most config should go in docker-compose.yml
+version: "3.7"
+services:
+  scheme-adapter:
+    env_file: ./config/scheme-adapter.lewbank2.env
+    ports:
+      - "4100:4000" #inbound from switch
+      - "4101:4001" #outbound from dfsp
+
+  custom-dfsp:
+    env_file: ./config/custom-dfsp.lewbank2.env
+    # volumes:
+      # TODO: there are probably better ways to set the config.
+      # - ./config/lewbank1.js:/opt/custom-dfsp/config/default.js
+    ports:
+      - "4102:4999"
+    
