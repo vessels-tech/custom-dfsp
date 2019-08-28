@@ -4,7 +4,7 @@ export enum IdType {
   ACCOUNT_ID = 'ACCOUNT_ID',
 }
 
-export type IdValue = String
+export type IdValue = string
 
 export type ParticipantsResponse = {
   fspId: String

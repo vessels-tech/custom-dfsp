@@ -27,6 +27,7 @@ export async function getParticipants(ctx: Context) {
 export async function getParties(ctx: Context) {
   const { idType, idValue } = ctx.params;
 
+  //TODO: implement based on list of registered users (maybe store in redis or sqlite for now?)
   //For now this just mocks out and 'pretends' to have any party that it is asked for.
   const response: TransferParty = {
     idType,
@@ -37,8 +38,6 @@ export async function getParties(ctx: Context) {
 }
 
 export async function postQuoteRequests(ctx: Context) {
-  //TODO: this is where we got up to! we need to do *something* with the quoteRequest we get back from the scheme adapter
-
 
   //Temp mock response
   const response: QuoteResponse = {
@@ -53,6 +52,11 @@ export async function postQuoteRequests(ctx: Context) {
 }
 
 export async function postTransfers(ctx: Context) {
+
+  //TODO: handle the transfer! 
+  /*
+    - if we recieved money for user, increment their amount!
+  */
 
   const response: TransferResponse = {
     homeTransactionId: '0000-0000-0000-0000',

@@ -1,12 +1,13 @@
+import { IdType, IdValue } from './InboundApiTypes';
 
-import Logger from '../service/logger';
-import { SomeResult, makeSuccess, makeError } from '../util/AppProviderTypes'
-import {
-  AccountModel,
-  getAccountForUser
-} from '../queries/account'
-import { Credential, credentialModelToCredential } from './Credential'
-import { getCredentialsForUser } from '../queries/credential';
+// import Logger from '../service/logger';
+// import { SomeResult, makeSuccess, makeError } from '../util/AppProviderTypes'
+// import {
+//   AccountModel,
+//   getAccountForUser
+// } from '../queries/account'
+// import { Credential, credentialModelToCredential } from './Credential'
+// import { getCredentialsForUser } from '../queries/credential';
 
 
 /**
@@ -14,52 +15,54 @@ import { getCredentialsForUser } from '../queries/credential';
  */
 
 export type Account = {
-  username: string,
-  accessToken: string
+  idType: IdType,
+  idValue: IdValue,
+  name: string,
+  funds: number
 }
 
-//TODO: is there a way to do this with generators?
-function accountModelToAccount(input: AccountModel): Account {
-  return {
-    username: input.username,
-    accessToken: input.access_token,
-  }
-}
+// //TODO: is there a way to do this with generators?
+// function accountModelToAccount(input: AccountModel): Account {
+//   return {
+//     username: input.username,
+//     accessToken: input.access_token,
+//   }
+// }
 
-export async function accountForUser(username: string): Promise<SomeResult<Account>> {
-  try {
-    const accountModel = await getAccountForUser(username)
-    if (!accountModel) {
-      throw new Error(`No account found for username: ${username}`)
-    }
+// export async function accountForUser(username: string): Promise<SomeResult<Account>> {
+//   try {
+//     const accountModel = await getAccountForUser(username)
+//     if (!accountModel) {
+//       throw new Error(`No account found for username: ${username}`)
+//     }
 
-    const account = accountModelToAccount(accountModel)
-    return makeSuccess(account)
-  } catch (err) {
-    Logger.error(err);
-    return makeError(err.message)
-  }
-}
+//     const account = accountModelToAccount(accountModel)
+//     return makeSuccess(account)
+//   } catch (err) {
+//     Logger.error(err);
+//     return makeError(err.message)
+//   }
+// }
 
 
-/**
- * @function credentialsForUser
- * @description Get the saved credentials for the user
- * 
- */
-export async function credentialsForUser(username: string): Promise<SomeResult<Credential[]>> {
-  try {
-    const credentialModels = await getCredentialsForUser(username)
-    if (!credentialModels) {
-      throw new Error(`No credentials found for username: ${username}`)
-    }
+// /**
+//  * @function credentialsForUser
+//  * @description Get the saved credentials for the user
+//  * 
+//  */
+// export async function credentialsForUser(username: string): Promise<SomeResult<Credential[]>> {
+//   try {
+//     const credentialModels = await getCredentialsForUser(username)
+//     if (!credentialModels) {
+//       throw new Error(`No credentials found for username: ${username}`)
+//     }
 
-    console.log('credentialModels', credentialModels)
+//     console.log('credentialModels', credentialModels)
 
-    const credentials = credentialModels.map(i => credentialModelToCredential(i))
-    return makeSuccess(credentials)
-  } catch (err) {
-    Logger.error(err);
-    return makeError(err.message)
-  }
-}
+//     const credentials = credentialModels.map(i => credentialModelToCredential(i))
+//     return makeSuccess(credentials)
+//   } catch (err) {
+//     Logger.error(err);
+//     return makeError(err.message)
+//   }
+// }
