@@ -10,7 +10,7 @@ import {
 const mmRouter = new KoaRouter()
 
 mmRouter.get('/health', shallow);
-mmRouter.get('/account', getAccount) //get an account, name, funds etc
+mmRouter.get('/account/:idType/:idValue', getAccount) //get an account, name, funds etc
 mmRouter.post('/account', registerAccount) //sign up for an account
 mmRouter.post('/transfer', transfer); //make a transfer from one account to another
 

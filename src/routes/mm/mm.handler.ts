@@ -1,13 +1,13 @@
 import { Context } from 'koa'
-
-import mlClient from '../../service/mlClient'
-import Config from '../../service/config'
-import { 
-  IdType,
-  Party,
-} from '../../model/InboundApiTypes'
-
 import request from 'request-promise-native'
+
+import Config from '../../service/config'
+import AccountStore from '../../service/AccountStore';
+import { 
+  // unsafeUnwrap, 
+  ResultType,
+} from '../../util/AppProviderTypes';
+import { Account } from '../../model/Account';
 
 /**
  * Utility method to build a set of headers required by the SDK outbound API
@@ -25,11 +25,28 @@ const buildHeaders = () => {
   return headers;
 };
 
-//TODO: I still feel like I have this the wrong way around...
-
-
 export async function getAccount(ctx: Context) {
-  ctx.body = true
+  const { idValue } = ctx.params; //we ignore the id type for now
+  const accountStore: AccountStore = ctx.state.accountStore;
+  
+  const getAccountResult = accountStore.getAccount(idValue)
+  // TODO: make more generic
+  if (getAccountResult.type === ResultType.ERROR) {
+    ctx.status = 404
+    ctx.body = {
+      statusCode: 404,
+      error: "Not found",
+      message: "Account not found"
+    }
+
+    return
+  }
+
+  const account = getAccountResult.result
+  ctx.body = {
+    statusCode: 200,
+    data: account
+  }
 }
 
 
@@ -39,30 +56,23 @@ export async function getAccount(ctx: Context) {
  * @description Tell the switch to register an account with this dfsp
  */
 export async function registerAccount(ctx: Context) {
-
-  //TODO: read the MSISDN number from the req.body
-  const msisdn = "+61404404404"
-  const party: Party = {
-    partyIdInfo: {
-      partyIdType: IdType.MSISDN,
-      partyIdentifier: msisdn,
-      // partySubIdOrType: String,
-      fspId: Config.DFSP_ID
-    },
-    name: 'Robert Glasper',
-    personalInfo: {
-      complexName: {
-        firstName: 'Robert',
-        lastName: 'Glasper',
-      },
-      dateOfBirth: '1974-01-01',
-    }
+  const { idType, idValue, name, funds } = ctx.request.body;
+  //TODO: validate
+  const accountStore: AccountStore = ctx.state.accountStore;
+  const newAccount: Account = {
+    idType, 
+    idValue, 
+    name,
+    funds,
   }
-  
-  const body = { party }
-  await mlClient.putParties(IdType.MSISDN, msisdn, JSON.stringify(body), Config.DFSP_ID)
 
-  ctx.body = true
+  accountStore.addAccount(newAccount)
+  
+  ctx.status = 201
+  ctx.body = {
+    statusCode: 201,
+    message: 'Created new account'
+  }
 }
 
 
