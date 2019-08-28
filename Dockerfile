@@ -9,10 +9,10 @@ RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool aut
 COPY package.json package-lock.json* /opt/custom-dfsp/
 RUN npm install
 
+COPY tsconfig.json /opt/custom-dfsp/tsconfig.json
+RUN mkdir -p /opt/custom-dfsp/config
 COPY src /opt/custom-dfsp/src
-COPY dist /opt/custom-dfsp/dist
 COPY secrets /opt/custom-dfsp/secrets
 
-EXPOSE 4000
 CMD ["npm", "run", "start"]
 ENTRYPOINT [ "sh", "-c" ]

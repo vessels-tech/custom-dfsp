@@ -10,8 +10,6 @@ services:
     volumes:
       - ../sdk-scheme-adapter/package.json:/opt/sdk-scheme-adapter/package.json
       - ../sdk-scheme-adapter/src:/opt/sdk-scheme-adapter/src
-    ports:
-      - "4000:4000"
     depends_on:
       - redis
     command:
@@ -19,14 +17,14 @@ services:
   
   custom-dfsp:
     build:
-      context: ./
+      context: .
+    # image: node:10.15.3-alpine
     volumes:
+      # TODO: there are probably better ways to set the config.
+      - ./config/lewbank1.js:/opt/custom-dfsp/config/default.js
       - ./src:/opt/custom-dfsp/src
-      - ./config:/opt/custom-dfsp/config
-      - ./package.json:/opt/custom-dfsp/package.json
+      - ./node_modules:/opt/custom-dfsp/node_modules
       - ./tsconfig.json:/opt/custom-dfsp/tsconfig.json
-    ports:
-      - "4999:4999"
     depends_on:
       - scheme-adapter
     command:
