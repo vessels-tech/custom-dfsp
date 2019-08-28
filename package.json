@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./dist",
-    "watch": "tsc-watch --onSuccess \"node ./dist\"",
+    "watch": "TSC_NONPOLLING_WATCHER='1' tsc-watch --onSuccess \"node ./dist\"",
+    "watch-ts-node": "ts-node-dev --poll --interval 1000 src/index.ts",
     "dev": "nodemon ./dist",
     "raml": "raml2html -i doc/api/api.raml -o api.html",
     "knex": "knex --knexfile ./config/knexfile.js"
@@ -60,6 +61,7 @@
     "nodemon": "1.19.1",
     "raml2html": "7.1.0",
     "ts-node": "8.3.0",
+    "ts-node-dev": "^1.0.0-pre.42",
     "tsc-watch": "2.2.1",
     "typescript": "3.5.2"
   }

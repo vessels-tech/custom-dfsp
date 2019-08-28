@@ -1,17 +1,26 @@
 #env specific config. Most config should go in docker-compose.yml
 version: "3.7"
 services:
+  redis:
+    networks:
+      - lewbank1_dfsp_net
+
   scheme-adapter:
     env_file: ./config/scheme-adapter.lewbank2.env
     ports:
-      - "4100:4000" #inbound from switch
-      - "4101:4001" #outbound from dfsp
+      - "4100:4100" #inbound from switch
+      - "4101:4101" #outbound from dfsp
+    networks:
+      - lewbank1_dfsp_net
 
   custom-dfsp:
     env_file: ./config/custom-dfsp.lewbank2.env
-    # volumes:
-      # TODO: there are probably better ways to set the config.
-      # - ./config/lewbank1.js:/opt/custom-dfsp/config/default.js
     ports:
-      - "4102:4999"
+      - "4102:4102"
+    networks:
+      - lewbank1_dfsp_net
+
+networks: 
+  lewbank1_dfsp_net:
+    external: true
     
