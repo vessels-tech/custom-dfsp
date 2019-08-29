@@ -4,6 +4,7 @@ import {
 import {
   SomeResult, makeError, makeSuccess, ResultType,
 } from '../util/AppProviderTypes'
+import Config from './config';
 
 
 export type AccountStoreType = {
@@ -15,6 +16,11 @@ export type AccountStoreType = {
 
 export default class AccountStore {
   store: AccountStoreType = {}
+
+  constructor() {
+    //Add users from seed
+    Config.SEED_USERS.forEach((account: Account) => this.store[account.idValue] = account)
+  }
 
   
   addAccount(account: Account): void {

@@ -3,13 +3,14 @@ import { Context } from 'koa'
 import { 
   ParticipantsResponse, 
   TransferParty, 
-  // IdType, 
   QuoteResponse, 
-  Currency, 
   TransferResponse 
 } from '../../model/InboundApiTypes'
+import AccountStore from '../../service/AccountStore';
+import { httpUnwrap } from '../../util/AppProviderTypes';
 
 export async function getParticipants(ctx: Context) {
+  
   //TODO: move validation logic elsewhere
   /*
     - check that idType is in IdType enum
@@ -25,42 +26,52 @@ export async function getParticipants(ctx: Context) {
 }
 
 export async function getParties(ctx: Context) {
-  const { idType, idValue } = ctx.params;
+  const { idValue } = ctx.params;
+  const accountStore: AccountStore = ctx.state.accountStore;
 
-  //TODO: implement based on list of registered users (maybe store in redis or sqlite for now?)
-  //For now this just mocks out and 'pretends' to have any party that it is asked for.
+  const account = httpUnwrap(accountStore.getAccount(idValue))
+
   const response: TransferParty = {
-    idType,
-    idValue,
+    idType: account.idType,
+    idValue: account.idValue,
+    displayName: account.name,
   }
 
   ctx.body = response;
+  ctx.status = 200
 }
 
 export async function postQuoteRequests(ctx: Context) {
+  const {
+    quoteId,
+    transactionId,
+    amount,
+    currency,
+  } = ctx.request.body
 
-  //Temp mock response
   const response: QuoteResponse = {
-    quoteId: '0000-0000-0000-0000',
-    transactionId: '0000-0000-0000-0000',
-    transferAmount: '100.00',
-    transferAmountCurrency: Currency.AUD,
-    //TODO: other fields?
+    quoteId,
+    transactionId,
+    transferAmount: amount,
+    transferAmountCurrency: currency
   }
 
   ctx.body = response
 }
 
 export async function postTransfers(ctx: Context) {
-  console.log("TODO: postTransfers!")
+  const accountStore: AccountStore = ctx.state.accountStore;
+  const { transferId, to: { idValue }, amount } = ctx.request.body
 
-  //TODO: handle the transfer! 
-  /*
-    - if we recieved money for user, increment their amount!
-  */
+  const amountNum = parseFloat(amount)
+
+  /* Add funds to the user's account */
+  httpUnwrap(accountStore.addFundsToAccount(idValue, amountNum))
 
   const response: TransferResponse = {
-    homeTransactionId: '0000-0000-0000-0000',
+    //I'm not sure if this is correct, but it's ok for now
+    homeTransactionId: transferId,
   }
   ctx.body = response
+  ctx.status = 200
 }

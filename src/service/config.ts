@@ -18,6 +18,7 @@ const Config = {
   TLS: RC.TLS,
   JWS_SIGN: RC.JWS_SIGN,
   JWS_SIGNING_KEY,
+  SEED_USERS: RC.SEED_USERS,
 }
 
 export default Config;
