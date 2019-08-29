@@ -24,7 +24,7 @@ export default class AccountStore {
 
   getAccount(idValue: string): SomeResult<Account> {
     if (!this.store[idValue]) {
-      return makeError(`Account not found for idValue: ${idValue}`)
+      return makeError(`Account not found for idValue: ${idValue}`, 404)
     }
     
     const account = this.store[idValue]
@@ -38,19 +38,31 @@ export default class AccountStore {
 
   addFundsToAccount(idValue: string, amount: number): SomeResult<any> {
     if (amount <= 0) {
-      return makeError('addFundsToAccount amount must be greater than 0')
+      return makeError('addFundsToAccount amount must be greater than 0', 400)
     } 
 
-    const getAccountResult = this.getAccount(idValue)
+    return this._modifyAccountFunds(idValue, amount)
+  }
 
+  deductFundsFromAccount(idValue: string, amount: number): SomeResult<any> {
+    if (amount >= 0) {
+      return makeError('deductFundsFromAccount, amount must be less than 0', 400)
+    } 
+
+    return this._modifyAccountFunds(idValue, amount)
+  }
+
+  _modifyAccountFunds(idValue: string, delta: number): SomeResult<any> {
+    const getAccountResult = this.getAccount(idValue)
     if (getAccountResult.type === ResultType.ERROR) {
       return getAccountResult
     }
 
     const account = getAccountResult.result;
-    account.funds += amount
+    account.funds += delta
 
     this.addAccount(account)
     return makeSuccess(undefined)
   }
+
 }

@@ -17,6 +17,7 @@ import adapterRouter  from './routes/adapter/adapter.routes'
 import Config from './service/config';
 import Logger from './service/logger';
 import AccountStore from './service/AccountStore'
+import { HttpError } from './util/AppProviderTypes'
 
 
 const app = new Koa();
@@ -36,13 +37,33 @@ api
 /* Override Koa's Error Handler*/
 app.context.onerror = errorHandler;
 
-
 /* Register Middleware */
 app
+  //Simple Error Handling
+  .use(async (ctx, next) => {
+    try {
+      await next();
+    } catch (err) {
+      if (err instanceof HttpError) {
+        ctx.status = err.getStatus()
+        ctx.body = err.getBody()
+        ctx.app.emit('error', err, ctx);
+
+        return;
+      }
+      ctx.status = err.status || 500;
+      ctx.body = {
+        statusCode: err.status || 500,
+        error: err.message,
+        message: err.message,
+      }
+      ctx.app.emit('error', err, ctx);
+    }
+  })
   //Attach state to context object
   .use(async (ctx, next) => {
     ctx.state.accountStore = accountStore;
-
+    
     await next()
   })
   .use(morgan('tiny')) //TODO: configure based on env vars
@@ -52,6 +73,12 @@ app
   .use(api.routes())
   .use(api.allowedMethods())
   .use(koa404Handler)
+
+
+/* Centralized error logging */
+app.on('error', (err) => {
+  console.log(`[ERROR]`, err)
+});
   
 /* Start the Server */
 app.listen(Config.PORT, () => {
