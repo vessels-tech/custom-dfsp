@@ -51,7 +51,7 @@ export async function registerAccount(ctx: Context) {
     idType, 
     idValue, 
     name,
-    funds,
+    funds: parseFloat(funds) //Google sheets sends a string even though it should be a number
   }
 
   accountStore.addAccount(newAccount)
@@ -74,18 +74,16 @@ export async function transfer(ctx: Context) {
   const accountStore: AccountStore = ctx.state.accountStore;
   const positionStore: SimplePositionStore = ctx.state.positionStore;
 
+  console.log("transfer request.body", ctx.request.body)
 
   //TODO: use middleware to validate
   const schema = Joi.object().keys({
-    from: Joi.object().keys({
-      displayName: Joi.string().optional(),
-      idType: Joi.string().allow(['MSISDN']).required(),
-      idValue: Joi.string().required(),
-    }).required(),
-    to: Joi.object().keys({
-      idType: Joi.string().allow(['MSISDN']).required(),
-      idValue: Joi.string().required(),
-    }).required(),
+    //Hacky alternative as Google's Spreadheets URLFetch doesn't nest JSON properly
+    fromDisplayName: Joi.string().optional(),
+    fromIdType: Joi.string().allow(['MSISDN']).required(),
+    fromIdValue: Joi.string().required(),
+    toIdType: Joi.string().allow(['MSISDN']).required(),
+    toIdValue: Joi.string().required(),
     amount: Joi.string().regex(/^([0]|([1-9][0-9]{0,17})).([0-9]*)$/).required(), //TODO put in money regex
     note: Joi.string().optional()
   })
@@ -96,10 +94,10 @@ export async function transfer(ctx: Context) {
   const transfer = validationResult.value
 
   /* DFSP Validation */
-  if (transfer.from.idValue === transfer.to.idValue) {
+  if (transfer.fromIdValue === transfer.toIdValue) {
     throw new HttpError(400, `Cannot send funds to self`)
   }
-  const account = httpUnwrap(await accountStore.getAccount(transfer.from.idValue))
+  const account = httpUnwrap(await accountStore.getAccount(transfer.fromIdValue))
   const amountNum = parseFloat(transfer.amount)
   if (account.funds < amountNum) {
     throw new HttpError(400, `Account does not have enough funds for transfer.`)
@@ -114,8 +112,14 @@ export async function transfer(ctx: Context) {
     headers: buildHeaders(),
     body: {
       ...transfer,
-      from: transfer.from,
-      to: transfer.to,
+      from: {
+        idType: transfer.fromIdType,
+        idValue: transfer.fromIdValue,
+      },
+      to: {
+        idType: transfer.toIdType,
+        idValue: transfer.toIdValue,
+      },
       amountType: 'SEND',
       currency: Config.CURRENCY,
       transactionType: 'TRANSFER',
@@ -128,10 +132,10 @@ export async function transfer(ctx: Context) {
   await request(options)
 
   /* Transfer succeeded, deduct from user's account */
-  accountStore.deductFundsFromAccount(transfer.from.idValue, amountNum * -1)
+  accountStore.deductFundsFromAccount(transfer.fromIdValue, amountNum * -1)
 
   /* Deduct from the DFSP's Position */
-  positionStore.changePosition(amountNum)
+  positionStore.changePosition(amountNum * -1)
 
 
   /* Response */
