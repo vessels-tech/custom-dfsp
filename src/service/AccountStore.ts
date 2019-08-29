@@ -8,12 +8,13 @@ import Config from './config';
 import { Db } from 'mongodb';
 
 
+const AccountCollection = 'accountCollection'
+
 export type AccountStoreType = {
   [index: string]: Account
 }
 
 
-//TODO: persist state somewhere
 
 export default class AccountStore {
   store: AccountStoreType = {}
@@ -27,26 +28,33 @@ export default class AccountStore {
   }
 
   
-  addAccount(account: Account): void {
+  async addAccount(account: Account): Promise<void> {
+    const accounts = await this._mongoGetAccounts();
+
     //Note: if the same idValue is used with a different ID type, the account will be overriden
-    this.store[account.idValue] = account;
+    accounts[account.idValue] = account;
+    await this._mongoSaveAccounts(accounts)
   }
 
-  getAccount(idValue: string): SomeResult<Account> {
-    if (!this.store[idValue]) {
+  async getAccount(idValue: string): Promise<SomeResult<Account>> {
+    const accounts = await this._mongoGetAccounts();
+
+    if (!accounts[idValue]) {
       return makeError(`Account not found for idValue: ${idValue}`, 404)
     }
     
-    const account = this.store[idValue]
+    const account = accounts[idValue]
     return makeSuccess<Account>(account)
   }
 
-  getAccounts(): SomeResult<Array<Account>> {
-    const accounts = Object.keys(this.store).map(k => this.store[k])
-    return makeSuccess(accounts)
+  async getAccounts(): Promise<SomeResult<Array<Account>>> {
+    const accounts = await this._mongoGetAccounts();
+    const accountList = Object.keys(accounts).map(k => accounts[k])
+
+    return makeSuccess(accountList)
   }
 
-  addFundsToAccount(idValue: string, amount: number): SomeResult<any> {
+  async addFundsToAccount(idValue: string, amount: number): Promise<SomeResult<any>> {
     if (amount <= 0) {
       return makeError('addFundsToAccount amount must be greater than 0', 400)
     } 
@@ -54,7 +62,7 @@ export default class AccountStore {
     return this._modifyAccountFunds(idValue, amount)
   }
 
-  deductFundsFromAccount(idValue: string, amount: number): SomeResult<any> {
+ async deductFundsFromAccount(idValue: string, amount: number): Promise<SomeResult<any>> {
     if (amount >= 0) {
       return makeError('deductFundsFromAccount, amount must be less than 0', 400)
     } 
@@ -62,8 +70,28 @@ export default class AccountStore {
     return this._modifyAccountFunds(idValue, amount)
   }
 
-  _modifyAccountFunds(idValue: string, delta: number): SomeResult<any> {
-    const getAccountResult = this.getAccount(idValue)
+  /*
+   * These are some lazy uses of mongo, but we just want to get basic state working 
+   */
+  async _mongoGetAccounts(): Promise<AccountStoreType> {
+    const accountCol = this.db.collection(AccountCollection)
+    try {
+      const accounts = await accountCol.findOne({ _id: 'accounts' })
+      return accounts.value;
+    } catch (err) {
+      //Lazily init the accounts, as we can't do it in the constructor
+      await accountCol.insertOne({ _id: 'accounts', value: {} })
+      return {}
+    }
+  }
+
+  async _mongoSaveAccounts(accounts: AccountStoreType): Promise<void> {
+    const accountCol = this.db.collection(AccountCollection)
+    await accountCol.update({ _id: 'accounts' }, { _id: 'accounts', value: accounts})
+  }
+
+  async _modifyAccountFunds(idValue: string, delta: number): Promise<SomeResult<any>> {
+    const getAccountResult = await this.getAccount(idValue)
     if (getAccountResult.type === ResultType.ERROR) {
       return getAccountResult
     }
