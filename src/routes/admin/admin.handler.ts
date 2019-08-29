@@ -5,7 +5,7 @@ import { unsafeUnwrap, ResultType } from '../../util/AppProviderTypes';
 
 export async function getAccounts(ctx: Context) {
   const accountStore: AccountStore = ctx.state.accountStore;
-  const accounts = unsafeUnwrap(accountStore.getAccounts())
+  const accounts = unsafeUnwrap(await accountStore.getAccounts())
 
   ctx.body = {
     statusCode: 200,
@@ -19,7 +19,7 @@ export async function cashIn(ctx: Context) {
   const { amount } = ctx.request.body;
   const accountStore: AccountStore = ctx.state.accountStore;
 
-  const addFundsResult = accountStore.addFundsToAccount(idValue, amount)
+  const addFundsResult = await accountStore.addFundsToAccount(idValue, amount)
   // TODO: make more generic
   if (addFundsResult.type === ResultType.ERROR) {
     ctx.status = 404
@@ -45,6 +45,6 @@ export async function getPosition(ctx: Context) {
   ctx.status = 200
   ctx.body = { 
     statusCode: 200,
-    position: positionStore.getPosition()
+    position: await positionStore.getPosition()
   }
 }

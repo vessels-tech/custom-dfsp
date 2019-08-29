@@ -30,7 +30,7 @@ export async function getParties(ctx: Context) {
   const { idValue } = ctx.params;
   const accountStore: AccountStore = ctx.state.accountStore;
 
-  const account = httpUnwrap(accountStore.getAccount(idValue))
+  const account = httpUnwrap(await  accountStore.getAccount(idValue))
 
   const response: TransferParty = {
     idType: account.idType,
@@ -68,7 +68,7 @@ export async function postTransfers(ctx: Context) {
   const amountNum = parseFloat(amount)
 
   /* Add funds to the user's account */
-  httpUnwrap(accountStore.addFundsToAccount(idValue, amountNum))
+  httpUnwrap(await accountStore.addFundsToAccount(idValue, amountNum))
 
   /* Increment the position (other dfsp owes us now!)*/
   positionStore.changePosition(amountNum)

@@ -30,7 +30,7 @@ export async function getAccount(ctx: Context) {
   const { idValue } = ctx.params; //we ignore the id type for now
   const accountStore: AccountStore = ctx.state.accountStore;
   
-  const account = httpUnwrap(accountStore.getAccount(idValue))
+  const account = httpUnwrap(await accountStore.getAccount(idValue))
   ctx.body = {
     statusCode: 200,
     data: account
@@ -99,7 +99,7 @@ export async function transfer(ctx: Context) {
   if (transfer.from.idValue === transfer.to.idValue) {
     throw new HttpError(400, `Cannot send funds to self`)
   }
-  const account = httpUnwrap(accountStore.getAccount(transfer.from.idValue))
+  const account = httpUnwrap(await accountStore.getAccount(transfer.from.idValue))
   const amountNum = parseFloat(transfer.amount)
   if (account.funds < amountNum) {
     throw new HttpError(400, `Account does not have enough funds for transfer.`)

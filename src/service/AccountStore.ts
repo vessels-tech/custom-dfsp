@@ -17,12 +17,12 @@ export type AccountStoreType = {
 
 
 export default class AccountStore {
-  store: AccountStoreType = {}
+  seedAccounts: AccountStoreType = {}
   db: Db;
 
   constructor(db: Db) {
     //Add users from seed?
-    Config.SEED_USERS.forEach((account: Account) => this.store[account.idValue] = account)
+    Config.SEED_USERS.forEach((account: Account) => this.seedAccounts[account.idValue] = account)
     
     this.db = db
   }
@@ -80,8 +80,9 @@ export default class AccountStore {
       return accounts.value;
     } catch (err) {
       //Lazily init the accounts, as we can't do it in the constructor
-      await accountCol.insertOne({ _id: 'accounts', value: {} })
-      return {}
+      await accountCol.insertOne({ _id: 'accounts', value: this.seedAccounts })
+      
+      return this.seedAccounts
     }
   }
 
