@@ -76,15 +76,14 @@ export async function transfer(ctx: Context) {
   const schema = Joi.object().keys({
     from: Joi.object().keys({
       displayName: Joi.string().optional(),
-      idType: Joi.string().required(),
+      idType: Joi.string().allow(['MSISDN']).required(),
       idValue: Joi.string().required(),
     }).required(),
     to: Joi.object().keys({
-      idType: Joi.string().required(),
+      idType: Joi.string().allow(['MSISDN']).required(),
       idValue: Joi.string().required(),
     }).required(),
-    // amount: Joi.string().regex(/^*/).required(), //TODO put in money regex
-    amount: Joi.string().required(), //TODO put in money regex
+    amount: Joi.string().regex(/^([0]|([1-9][0-9]{0,17})).([0-9]*)$/).required(), //TODO put in money regex
     note: Joi.string().optional()
   })
   const validationResult = schema.validate(ctx.request.body)
@@ -120,9 +119,9 @@ export async function transfer(ctx: Context) {
       homeTransactionId: '123ABC'
     }
   }
-  console.log("executing POST", options.url)
-  console.log("req body", options.body)
-
+  
+  //TODO: this only fails on timeout if the party can't be found
+  //I think that's an issue in the scheme adapter, not this implementation
   await request(options)
 
   /* Transfer succeeded, deduct from user's account */

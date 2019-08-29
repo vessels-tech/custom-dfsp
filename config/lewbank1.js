@@ -14,7 +14,15 @@ const config = {
     }
   },
   "JWS_SIGN": false,
-  "JWS_SIGNING_KEY_PATH": "secrets/jwsSigningKey.key"
+  "JWS_SIGNING_KEY_PATH": "secrets/jwsSigningKey.key",
+  SEED_USERS: [
+    {
+      "idType": "MSISDN",
+      "idValue": "123456789",
+      "name": "Lewis",
+      "funds": 500
+    }
+  ]
 }
 
 module.exports = config;
