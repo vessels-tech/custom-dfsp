@@ -1,11 +1,11 @@
 import { Context } from 'koa'
 import request from 'request-promise-native'
+import Joi from '@hapi/joi'
 
 import Config from '../../service/config'
 import AccountStore from '../../service/AccountStore';
-import { 
-  // unsafeUnwrap, 
-  ResultType,
+import {  
+  httpUnwrap, HttpError,
 } from '../../util/AppProviderTypes';
 import { Account } from '../../model/Account';
 
@@ -29,20 +29,7 @@ export async function getAccount(ctx: Context) {
   const { idValue } = ctx.params; //we ignore the id type for now
   const accountStore: AccountStore = ctx.state.accountStore;
   
-  const getAccountResult = accountStore.getAccount(idValue)
-  // TODO: make more generic
-  if (getAccountResult.type === ResultType.ERROR) {
-    ctx.status = 404
-    ctx.body = {
-      statusCode: 404,
-      error: "Not found",
-      message: "Account not found"
-    }
-
-    return
-  }
-
-  const account = getAccountResult.result
+  const account = httpUnwrap(accountStore.getAccount(idValue))
   ctx.body = {
     statusCode: 200,
     data: account
@@ -83,56 +70,67 @@ export async function registerAccount(ctx: Context) {
  * @param ctx 
  */
 export async function transfer(ctx: Context) {
+  const accountStore: AccountStore = ctx.state.accountStore;
 
-  /*
-    TODO internally:
-    - check that the user exists
-    - check that the user has enough funds for the tx
-  
-  */
+  //TODO: use middleware to validate
+  const schema = Joi.object().keys({
+    from: Joi.object().keys({
+      displayName: Joi.string().optional(),
+      idType: Joi.string().required(),
+      idValue: Joi.string().required(),
+    }).required(),
+    to: Joi.object().keys({
+      idType: Joi.string().required(),
+      idValue: Joi.string().required(),
+    }).required(),
+    // amount: Joi.string().regex(/^*/).required(), //TODO put in money regex
+    amount: Joi.string().required(), //TODO put in money regex
+    note: Joi.string().optional()
+  })
+  const validationResult = schema.validate(ctx.request.body)
+  if (validationResult.error) {
+    throw new HttpError(400, validationResult.error.message)
+  }
+  const transfer = validationResult.value
 
-  //Send the transfer to the scheme adapter to take care of
-  //This seems to just be forwarding it straight onto the switch
-  //The scheme adapter isn't doing anything for us here...
+  /* DFSP Validation */
+  if (transfer.from.idValue === transfer.to.idValue) {
+    throw new HttpError(400, `Cannot send funds to self`)
+  }
+  const account = httpUnwrap(accountStore.getAccount(transfer.from.idValue))
+  const amountNum = parseFloat(transfer.amount)
+  if (account.funds < amountNum) {
+    throw new HttpError(400, `Account does not have enough funds for transfer.`)
+  }
 
+  /* Forward to Scheme Adapter */
   const options = {
     url: `http://${Config.SCHEME_ADAPTER_ENDPOINT}/transfers`,
     method: 'POST',
     json: true,
+    simple: true,
     headers: buildHeaders(),
     body: {
-      "from": {
-        "displayName": "John Doe",
-        "idType": "MSISDN",
-        "idValue": "123456789"
-      },
-      "to": {
-          "idType": "MSISDN",
-          "idValue": "987654321"
-      },
-      "amountType": "SEND",
-      "currency": "AUD",
-      "amount": "100",
-      "transactionType": "TRANSFER",
-      "note": "test payment",
-      "homeTransactionId": "123ABC",
+      ...transfer,
+      from: transfer.from,
+      to: transfer.to,
+      amountType: 'SEND',
+      currency: Config.CURRENCY,
+      transactionType: 'TRANSFER',
+      homeTransactionId: '123ABC'
     }
   }
   console.log("executing POST", options.url)
+  console.log("req body", options.body)
 
-  try {
-    await request(options)
+  await request(options)
 
-    //If this succeeds, deduct from the user's account? Is that how this works?
+  /* Transfer succeeded, deduct from user's account */
+  accountStore.deductFundsFromAccount(transfer.from.idValue, amountNum * -1)
 
-    ctx.response.status = 200;
-    ctx.response.body = {processed: true}
-
-  } catch (err) {
-    
-    ctx.response.status = 500;
-    ctx.response.body = {
-      message: err.message || 'Unspecified error'
-    };
+  /* Response */
+  ctx.response.status = 200;
+  ctx.response.body = {
+    processed: true
   }
 }

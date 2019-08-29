@@ -52,6 +52,7 @@ export async function postQuoteRequests(ctx: Context) {
 }
 
 export async function postTransfers(ctx: Context) {
+  console.log("TODO: postTransfers!")
 
   //TODO: handle the transfer! 
   /*

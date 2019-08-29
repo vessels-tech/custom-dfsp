@@ -2,6 +2,7 @@ const config = {
   "HOSTNAME": "http://localhost",
   "PORT": 4102,
   "DFSP_ID": "lewbank2",
+  "CURRENCY": "AUD",
   // "DFSP_ID": "mojaloop-sdk",
   // "PEER_ENDPOINT": "localhost:3000",
   // "PEER_ENDPOINT": "ml-api-adapter.moja-box.vessels.tech", //For talking to switch
