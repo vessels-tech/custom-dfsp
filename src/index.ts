@@ -17,6 +17,7 @@ import adapterRouter  from './routes/adapter/adapter.routes'
 import Config from './service/config';
 import Logger from './service/logger';
 import AccountStore from './service/AccountStore'
+import SimplePositionStore from './service/SimplePositionStore'
 import { HttpError } from './util/AppProviderTypes'
 
 
@@ -26,6 +27,7 @@ const api = new KoaRouter()
 /* State */
 //TODO: refresh state from somewhere...
 const accountStore = new AccountStore()
+const positionStore = new SimplePositionStore(Config.INITIAL_POSITION)
 
 /* Register Routes */
 api
@@ -63,6 +65,7 @@ app
   //Attach state to context object
   .use(async (ctx, next) => {
     ctx.state.accountStore = accountStore;
+    ctx.state.positionStore = positionStore;
     
     await next()
   })

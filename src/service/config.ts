@@ -19,6 +19,7 @@ const Config = {
   JWS_SIGN: RC.JWS_SIGN,
   JWS_SIGNING_KEY,
   SEED_USERS: RC.SEED_USERS,
+  INITIAL_POSITION: RC.INITIAL_POSITION,
 }
 
 export default Config;

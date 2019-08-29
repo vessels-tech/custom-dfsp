@@ -7,6 +7,7 @@ import {
   TransferResponse 
 } from '../../model/InboundApiTypes'
 import AccountStore from '../../service/AccountStore';
+import SimplePositionStore from '../../service/SimplePositionStore';
 import { httpUnwrap } from '../../util/AppProviderTypes';
 
 export async function getParticipants(ctx: Context) {
@@ -55,18 +56,23 @@ export async function postQuoteRequests(ctx: Context) {
     transferAmount: amount,
     transferAmountCurrency: currency
   }
-
+  
   ctx.body = response
 }
 
 export async function postTransfers(ctx: Context) {
   const accountStore: AccountStore = ctx.state.accountStore;
+  const positionStore: SimplePositionStore = ctx.state.positionStore;
   const { transferId, to: { idValue }, amount } = ctx.request.body
 
   const amountNum = parseFloat(amount)
 
   /* Add funds to the user's account */
   httpUnwrap(accountStore.addFundsToAccount(idValue, amountNum))
+
+  /* Increment the position (other dfsp owes us now!)*/
+  positionStore.changePosition(amountNum)
+
 
   const response: TransferResponse = {
     //I'm not sure if this is correct, but it's ok for now

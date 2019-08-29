@@ -8,6 +8,7 @@ import {
   httpUnwrap, HttpError,
 } from '../../util/AppProviderTypes';
 import { Account } from '../../model/Account';
+import SimplePositionStore from '../../service/SimplePositionStore';
 
 /**
  * Utility method to build a set of headers required by the SDK outbound API
@@ -71,6 +72,8 @@ export async function registerAccount(ctx: Context) {
  */
 export async function transfer(ctx: Context) {
   const accountStore: AccountStore = ctx.state.accountStore;
+  const positionStore: SimplePositionStore = ctx.state.positionStore;
+
 
   //TODO: use middleware to validate
   const schema = Joi.object().keys({
@@ -126,6 +129,10 @@ export async function transfer(ctx: Context) {
 
   /* Transfer succeeded, deduct from user's account */
   accountStore.deductFundsFromAccount(transfer.from.idValue, amountNum * -1)
+
+  /* Deduct from the DFSP's Position */
+  positionStore.changePosition(amountNum)
+
 
   /* Response */
   ctx.response.status = 200;

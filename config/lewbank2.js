@@ -22,7 +22,8 @@ const config = {
       "name": "Lewis",
       "funds": 100
     }
-  ]
+  ],
+  INITIAL_POSITION: 10000
 }
 
 module.exports = config;
