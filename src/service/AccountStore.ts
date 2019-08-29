@@ -5,6 +5,7 @@ import {
   SomeResult, makeError, makeSuccess, ResultType,
 } from '../util/AppProviderTypes'
 import Config from './config';
+import { Db } from 'mongodb';
 
 
 export type AccountStoreType = {
@@ -16,10 +17,13 @@ export type AccountStoreType = {
 
 export default class AccountStore {
   store: AccountStoreType = {}
+  db: Db;
 
-  constructor() {
-    //Add users from seed
+  constructor(db: Db) {
+    //Add users from seed?
     Config.SEED_USERS.forEach((account: Account) => this.store[account.idValue] = account)
+    
+    this.db = db
   }
 
   

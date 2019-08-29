@@ -1,7 +1,10 @@
 version: "3.7"
 services:
   redis:
-    image: "redis:5.0.4-alpine"
+    image: redis:5.0.4-alpine
+
+  mongodb:
+    image: mongo
 
   scheme-adapter:
     build:
@@ -27,6 +30,7 @@ services:
       - ./node_modules:/opt/custom-dfsp/node_modules
     depends_on:
       - scheme-adapter
+      - mongodb
     command:
       - npm run watch
       # - npm run watch-ts-node

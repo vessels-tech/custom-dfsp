@@ -1,3 +1,4 @@
+import { Db } from 'mongodb';
 
 
 
@@ -11,9 +12,11 @@
  */
 export default class SimplePositionStore {
   position: number
+  db: Db
 
-  constructor(initialPosition: number) {
-    this.position = initialPosition
+  constructor(db: Db, initialPosition: number) {
+    this.position = initialPosition;
+    this.db = db;
   }
 
   getPosition() {
