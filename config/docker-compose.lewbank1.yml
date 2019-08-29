@@ -11,7 +11,6 @@ services:
     volumes:
       - ./docker/mongo_lewbank1:/data/db
 
-
   scheme-adapter:
     env_file: ./config/scheme-adapter.lewbank1.env
     ports:

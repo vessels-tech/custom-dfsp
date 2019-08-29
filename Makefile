@@ -21,7 +21,7 @@ dev:
 start:
 	# Use the -p flag to run multiple docker composes at once
 	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 up -d
-	# docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 up -d
+	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 up -d
 
 stop:
 	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 stop

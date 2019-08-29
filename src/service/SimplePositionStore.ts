@@ -1,6 +1,7 @@
 import { Db } from 'mongodb';
 
 
+const PositionCollection = 'positionCollection'
 
 //TODO: persist state somewhere
 
@@ -11,20 +12,33 @@ import { Db } from 'mongodb';
  *  environment.
  */
 export default class SimplePositionStore {
-  position: number
+  initialPosition: number
   db: Db
 
   constructor(db: Db, initialPosition: number) {
-    this.position = initialPosition;
+    this.initialPosition = initialPosition;
     this.db = db;
   }
 
-  getPosition() {
-    return this.position
+  async getPosition(): Promise<number> {
+    const positionCol = this.db.collection(PositionCollection)
+    try {
+      const position = await positionCol.findOne({_id: 'position'})
+      return position.value
+    } catch (err) {
+      //Lazily init the position, as we can't do it in the constructor
+      await positionCol.insertOne({ _id: 'position', value: this.initialPosition})
+
+      return this.initialPosition
+    }
   }
 
-  changePosition(delta: number) {
-    this.position += delta
+  async changePosition(delta: number): Promise<void> {
+    const positionCol = this.db.collection(PositionCollection)
+
+    let value = await this.getPosition();
+    value += delta
+    await positionCol.update({ _id: 'position' }, {_id:'position', value})
   }
 
 }

@@ -5,6 +5,12 @@ services:
     networks:
       - lewbank1_dfsp_net
 
+  mongodb:
+    networks:
+      - lewbank1_dfsp_net
+    volumes:
+      - ./docker/mongo_lewbank2:/data/db
+
   scheme-adapter:
     env_file: ./config/scheme-adapter.lewbank2.env
     ports:

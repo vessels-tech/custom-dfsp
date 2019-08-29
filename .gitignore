@@ -72,3 +72,4 @@ docs/
 # idea directory
 .idea/**
 **/*.iml
+docker
