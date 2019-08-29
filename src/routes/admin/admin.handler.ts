@@ -1,5 +1,6 @@
 import { Context } from 'koa'
 import AccountStore from '../../service/AccountStore';
+import SimplePositionStore from '../../service/SimplePositionStore';
 import { unsafeUnwrap, ResultType } from '../../util/AppProviderTypes';
 
 export async function getAccounts(ctx: Context) {
@@ -39,6 +40,11 @@ export async function cashIn(ctx: Context) {
 
 //Get the position of this dfsp. Not sure how this works without a central switch
 export async function getPosition(ctx: Context) {
+  const positionStore: SimplePositionStore = ctx.state.positionStore;
 
-  ctx.body = { status: 200 }
+  ctx.status = 200
+  ctx.body = { 
+    statusCode: 200,
+    position: positionStore.getPosition()
+  }
 }

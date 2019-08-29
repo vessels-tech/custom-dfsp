@@ -13,7 +13,10 @@ const config = {
     }
   },
   "JWS_SIGN": false,
-  "JWS_SIGNING_KEY_PATH": "secrets/jwsSigningKey.key"
+  "JWS_SIGNING_KEY_PATH": "secrets/jwsSigningKey.key",
+  SEED_USERS: {},
+  INITIAL_POSITION: 10000
+
 }
 
 module.exports = config;
