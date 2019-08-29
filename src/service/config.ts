@@ -20,6 +20,7 @@ const Config = {
   JWS_SIGNING_KEY,
   SEED_USERS: RC.SEED_USERS,
   INITIAL_POSITION: RC.INITIAL_POSITION,
+  MONGO_URL: RC.MONGO_URL,
 }
 
 export default Config;

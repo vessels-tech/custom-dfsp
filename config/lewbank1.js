@@ -23,7 +23,8 @@ const config = {
       "funds": 500
     }
   ],
-  INITIAL_POSITION: 10000
+  INITIAL_POSITION: 10000,
+  MONGO_URL: 'mongodb://lewbank1_mongodb_1:27017/lewbank1'
 }
 
 module.exports = config;
