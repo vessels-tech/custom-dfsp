@@ -54,3 +54,16 @@ package:
 	REPO=${REPO} VER=${VER} docker-compose build
 	docker push ${TAG_FSP}
 	docker push ${TAG_SCHEME_ADAPTER}
+
+deploy:
+	# TODO: find a way to pass in ver
+	# I want to try using kubernetes WITHOUT using Helm
+	kubectl apply configmap lewbank1-scheme-adapter-config --from-file=./deployment/lewbank1.scheme-adapter.config.yaml || echo 'already created configmap'
+	kubectl apply -f ./deployment
+
+destroy:
+	# kubens mojaloop
+	kubectl delete deployment lewbank1-deployment
+	# kubectl delete service lewbank1-service
+	# kubectl delete po lewbank1
+	kubectl delete configmap lewbank1-scheme-adapter-config
