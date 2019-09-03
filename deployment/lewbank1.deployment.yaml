@@ -30,9 +30,9 @@ spec:
             - name: DFSP_ID
               value: lewbank1
             - name: DFSP_PEER_ENDPOINT
-              value: unknown
+              value: inbound-lewbank2.moja-box.vessels.tech
             - name: DFSP_SCHEME_ADAPTER_ENDPOINT
-              value: unknown
+              value: localhost:4001
             - name: DFSP_MONGO_URL
               value: mongodb://localhost:27017/lewbank1
           command:
