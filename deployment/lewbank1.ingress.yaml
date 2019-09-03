@@ -8,7 +8,7 @@ spec:
   rules:
 
   # Talk to the dfsp api
-  - host: fsp-lewbank1.moja-box.vessels.tech
+  - host: dfsp-lewbank1.moja-box.vessels.tech
     http:
       paths:
       - path: /
