@@ -67,3 +67,13 @@ destroy:
 	# kubectl delete service lewbank1-service
 	# kubectl delete po lewbank1
 	kubectl delete configmap lewbank1-scheme-adapter-config
+
+
+
+##
+# Utils
+##
+health:
+	curl dfsp-lewbank1.moja-box.vessels.tech/health
+	curl outbound-lewbank1.moja-box.vessels.tech/asd
+	curl inbound-lewbank1.moja-box.vessels.tech/asd
