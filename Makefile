@@ -10,10 +10,10 @@ TAG_SCHEME_ADAPTER:=${REPO}/${NAME_SCHEME_ADAPTER}:${VER}
 build:
 	docker-compose build
 	# Tag other images to save time - they are all based on the same thing!
-	docker tag custom-dfsp_custom-dfsp:latest lewbank1_custom-dfsp:latest
-	docker tag custom-dfsp_scheme-adapter:latest lewbank1_scheme-adapter:latest
-	docker tag custom-dfsp_custom-dfsp:latest lewbank2_custom-dfsp:latest
-	docker tag custom-dfsp_scheme-adapter:latest lewbank2_scheme-adapter:latest
+	docker tag sheet-fsp_sheet-fsp:latest lewbank1_sheet-fsp:latest
+	docker tag sheet-fsp_scheme-adapter:latest lewbank1_scheme-adapter:latest
+	docker tag sheet-fsp_sheet-fsp:latest lewbank2_sheet-fsp:latest
+	docker tag sheet-fsp_scheme-adapter:latest lewbank2_scheme-adapter:latest
 
 watch:
 	npm run watch
@@ -35,10 +35,10 @@ stop:
 	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 stop
 
 logs-lewbank1:
-	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 logs -f custom-dfsp scheme-adapter 
+	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 logs -f sheet-fsp scheme-adapter 
 
 logs-lewbank2:
-	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 logs -f custom-dfsp scheme-adapter
+	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 logs -f sheet-fsp scheme-adapter
 
 lt-lewbank1:
 	lt -s lewbank1_a -p 4000
@@ -52,3 +52,5 @@ lt-lewbank2:
 ##
 package:
 	REPO=${REPO} VER=${VER} docker-compose build
+	docker push ${TAG_FSP}
+	docker push ${TAG_SCHEME_ADAPTER}
