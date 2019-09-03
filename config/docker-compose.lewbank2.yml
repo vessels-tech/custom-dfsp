@@ -19,7 +19,7 @@ services:
     networks:
       - lewbank1_dfsp_net
 
-  custom-dfsp:
+  sheet-fsp:
     env_file: ./config/custom-dfsp.lewbank2.env
     ports:
       - "4102:4102"
