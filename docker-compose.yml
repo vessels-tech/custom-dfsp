@@ -24,11 +24,11 @@ services:
     build:
       context: .
     volumes:
-      - ./package.json:/opt/custom-dfsp/package.json
-      - ./tsconfig.json:/opt/custom-dfsp/tsconfig.json
-      - ./config:/opt/custom-dfsp/config
-      - ./src:/opt/custom-dfsp/src
-      - ./node_modules:/opt/custom-dfsp/node_modules
+      - ./package.json:/opt/sheet-fsp/package.json
+      - ./tsconfig.json:/opt/sheet-fsp/tsconfig.json
+      - ./config:/opt/sheet-fsp/config
+      - ./src:/opt/sheet-fsp/src
+      - ./node_modules:/opt/sheet-fsp/node_modules
     depends_on:
       - scheme-adapter
       - mongodb
