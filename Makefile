@@ -1,4 +1,11 @@
 
+REPO:=ldaly
+VER:=$(shell ./config/_get_version.js )
+NAME_FSP:=sheet-fsp
+NAME_SCHEME_ADAPTER:=sdk-scheme-adapter
+TAG_FSP=${REPO}/${NAME_FSP}:${VER}
+TAG_SCHEME_ADAPTER:=${REPO}/${NAME_SCHEME_ADAPTER}:${VER}
+
 
 build:
 	docker-compose build
@@ -38,3 +45,10 @@ lt-lewbank1:
 
 lt-lewbank2:
 	lt -s lewbank2_a -p 4100
+
+
+##
+# Package & Deploy
+##
+package:
+	REPO=${REPO} VER=${VER} docker-compose build

@@ -7,6 +7,7 @@ services:
     image: mongo
 
   scheme-adapter:
+    image: ${REPO}/sdk-scheme-adapter:${VER}
     build:
       context: ../sdk-scheme-adapter
     env_file: ./config/scheme-adapter.lewbank1.env
@@ -18,10 +19,10 @@ services:
     command:
       - npm run docker-dev
   
-  custom-dfsp:
+  sheet-fsp:
+    image: ${REPO}/sheet-fsp:${VER}
     build:
       context: .
-    # image: node:10.15.3-alpine
     volumes:
       - ./package.json:/opt/custom-dfsp/package.json
       - ./tsconfig.json:/opt/custom-dfsp/tsconfig.json

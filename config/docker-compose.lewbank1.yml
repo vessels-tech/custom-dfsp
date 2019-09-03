@@ -19,7 +19,7 @@ services:
     networks:
       - dfsp_net
     
-  custom-dfsp:
+  sheet-fsp:
     env_file: ./config/custom-dfsp.lewbank1.env
     ports:
       - "4002:4002" #talk to mm api here
