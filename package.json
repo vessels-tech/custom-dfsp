@@ -1,6 +1,6 @@
 {
   "name": "sheet-fsp",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A custom DFSP implementation that uses the scheme adapter to talk to Mojaloop switches/peers.",
   "main": "./dist/index.js",
   "license": "MIT",

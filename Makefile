@@ -58,9 +58,11 @@ package:
 	docker push ${TAG_SCHEME_ADAPTER}
 
 deploy:
+	kubectl apply -f ./deployment/sheet-fsp.namespace.yaml
 	# TODO: find a way to pass in ver
 	# I want to try using kubernetes WITHOUT using Helm
 	kubectl create configmap lewbank1-scheme-adapter-config --from-file=./deployment/lewbank1.scheme-adapter.config.yaml || echo 'already created configmap'
+	kubectl create configmap lewbank2-scheme-adapter-config --from-file=./deployment/lewbank2.scheme-adapter.config.yaml || echo 'already created configmap'
 	kubectl apply -f ./deployment
 
 destroy:

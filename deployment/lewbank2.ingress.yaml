@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: lewbank2-ingress
+  namespace: sheet-fsp
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
