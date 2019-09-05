@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: sheet-fsp
-          image: ldaly/sheet-fsp:0.1.5
+          image: ldaly/sheet-fsp:0.1.6
           ports:
             - containerPort: 4002
           env:
@@ -41,7 +41,7 @@ spec:
             - npm run start
 
         - name: scheme-adapter
-          image: ldaly/sdk-scheme-adapter:0.1.5
+          image: ldaly/sdk-scheme-adapter:0.1.6
           ports:
             - containerPort: 4000
             - containerPort: 4001

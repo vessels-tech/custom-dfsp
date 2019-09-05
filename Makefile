@@ -81,3 +81,7 @@ health:
 	curl dfsp-lewbank1.moja-box.vessels.tech/health
 	curl outbound-lewbank1.moja-box.vessels.tech/asd
 	curl inbound-lewbank1.moja-box.vessels.tech/asd
+
+	curl dfsp-lewbank2.moja-box.vessels.tech/health
+	curl outbound-lewbank2.moja-box.vessels.tech/asd
+	curl inbound-lewbank2.moja-box.vessels.tech/asd
