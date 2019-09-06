@@ -74,6 +74,7 @@ destroy:
 	# kubectl delete service lewbank1-service
 	# kubectl delete po lewbank1
 	kubectl delete configmap lewbank1-scheme-adapter-config
+	kubectl delete configmap lewbank2-scheme-adapter-config
 
 
 
