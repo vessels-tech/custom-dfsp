@@ -66,22 +66,17 @@ deploy:
 
 deploy-new:
 	@kubectl create namespace ${NS} > /dev/null 2>&1 || echo 'Already Created namespace'
-	# kubectl apply -f ./deployment-new/shared.volume.yaml --namespace ${NS}
+	#These need to be created first for some reason
 	kubectl apply -f ./deployment-new/lewbank1.volume-claim.yaml --namespace ${NS}
+	kubectl apply -f ./deployment-new/lewbank2.volume-claim.yaml --namespace ${NS}
+
 	kubectl apply -f ./deployment-new --namespace ${NS}
 
 destroy-new:
 	kubectl delete namespace ${NS}
-	# @kubectl create namespace ${NS} > /dev/null 2>&1 || echo 'Already Created namespace'
-	# kubectl apply -f ./deployment-new/shared.volume.yaml --namespace ${NS}
-	# kubectl apply -f ./deployment-new/lewbank1.volume-claim.yaml --namespace ${NS}
-	# kubectl apply -f ./deployment-new --namespace ${NS}
 
 destroy:
-	# kubens mojaloop
 	kubectl delete deployment lewbank1-deployment
-	# kubectl delete service lewbank1-service
-	# kubectl delete po lewbank1
 	kubectl delete configmap lewbank1-scheme-adapter-config
 	kubectl delete configmap lewbank2-scheme-adapter-config
 
