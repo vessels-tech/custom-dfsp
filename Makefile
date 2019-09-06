@@ -5,6 +5,7 @@ NAME_FSP:=sheet-fsp
 NAME_SCHEME_ADAPTER:=sdk-scheme-adapter
 TAG_FSP=${REPO}/${NAME_FSP}:${VER}
 TAG_SCHEME_ADAPTER:=${REPO}/${NAME_SCHEME_ADAPTER}:${VER}
+NS:=sheet-fsp
 
 
 build:
@@ -59,11 +60,13 @@ package:
 
 deploy:
 	kubectl apply -f ./deployment/sheet-fsp.namespace.yaml
-	# TODO: find a way to pass in ver
-	# I want to try using kubernetes WITHOUT using Helm
-	kubectl create configmap lewbank1-scheme-adapter-config --from-file=./deployment/lewbank1.scheme-adapter.config.yaml || echo 'already created configmap'
-	kubectl create configmap lewbank2-scheme-adapter-config --from-file=./deployment/lewbank2.scheme-adapter.config.yaml || echo 'already created configmap'
+	kubectl create configmap lewbank1-scheme-adapter-config --from-file=./deployment/lewbank1.scheme-adapter.config.yaml > /dev/null 2>&1 || echo 'already created configmap'
+	kubectl create configmap lewbank2-scheme-adapter-config --from-file=./deployment/lewbank2.scheme-adapter.config.yaml > /dev/null 2>&1 || echo 'already created configmap'
 	kubectl apply -f ./deployment
+
+deploy-new:
+	@kubectl create namespace ${NS} > /dev/null 2>&1 || echo 'Already Created namespace'
+	kubectl apply -f ./deployment-new --namespace ${NS}
 
 destroy:
 	# kubens mojaloop
