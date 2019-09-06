@@ -3,7 +3,6 @@ import { Db } from 'mongodb';
 
 const PositionCollection = 'positionCollection'
 
-//TODO: persist state somewhere
 
 /**
  * @class SimplePositionStore
