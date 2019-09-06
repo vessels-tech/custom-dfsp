@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: lewbank2-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+
+  # Talk to the dfsp api
+  - host: test-dfsp-lewbank2.moja-box.vessels.tech
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: lewbank2-service
+          servicePort: 4102
+
+  # So the switch can talk to the scheme-adapter        
+  - host: test-inbound-lewbank2.moja-box.vessels.tech
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: lewbank2-service
+          servicePort: 4100
+
+  # For the dfsp to talk to the scheme-adapter
+  - host: test-outbound-lewbank2.moja-box.vessels.tech
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: lewbank2-service
+          servicePort: 4101

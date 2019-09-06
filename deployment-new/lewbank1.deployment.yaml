@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lewbank1-deployment
+  labels:
+    app: lewbank1
+    version: v1
+    role: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lewbank1
+  template:
+    metadata:
+      labels:
+        app: lewbank1
+    spec:
+      volumes:
+        - name: lewbank1-storage
+          persistentVolumeClaim:
+            claimName: lewbank1-volume-claim
+      containers:
+        - name: sheet-fsp
+          image: ldaly/sheet-fsp:0.1.6
+          ports:
+            - containerPort: 4002
+          env:
+            - name: CONFIG_FILENAME
+              value: default
+            - name: DFSP_PORT
+              value: '4002'
+            - name: DFSP_ID
+              value: lewbank1
+            - name: DFSP_PEER_ENDPOINT
+              value: inbound-lewbank2.moja-box.vessels.tech
+            - name: DFSP_SCHEME_ADAPTER_ENDPOINT
+              value: localhost:4001
+            - name: DFSP_MONGO_URL
+              value: mongodb://localhost:27017/lewbank1
+          command:
+            - sh
+            - -c
+            - npm run start
+
+        - name: scheme-adapter
+          image: ldaly/sdk-scheme-adapter:0.1.6
+          ports:
+            - containerPort: 4000
+            - containerPort: 4001
+          envFrom:
+            - configMapRef:
+                name: lewbank1-scheme-adapter-config
+          command:
+            - sh
+            - -c
+            - npm run start
+
+        - name: redis
+          image: redis:5.0.4-alpine
+          ports:
+            - containerPort: 6379
+
+        - name: mongodb
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: lewbank1-storage
+    
+   

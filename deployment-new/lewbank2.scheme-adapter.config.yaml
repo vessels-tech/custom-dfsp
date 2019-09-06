@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lewbank2-scheme-adapter-config
+data:
+  INBOUND_LISTEN_PORT: "4100"
+  OUTBOUND_LISTEN_PORT: "4101"
+  MUTUAL_TLS_ENABLED: "false"
+  VALIDATE_INBOUND_JWS: "false"
+  JWS_SIGN: "false"
+  JWS_SIGNING_KEY_PATH: "/opt/sdk-scheme-adapter/secrets/jwsSigningKey.key"
+  JWS_VERIFICATION_KEYS_DIRECTORY: "/opt/sdk-scheme-adapter/secrets/jwsVerificationKeys"
+  IN_CA_CERT_PATH: "./secrets/cacert.pem"
+  IN_SERVER_CERT_PATH: "./secrets/servercert.pem"
+  IN_SERVER_KEY_PATH: "./secrets/serverkey.pem"
+  OUT_CA_CERT_PATH: "./secrets/cacert.pem"
+  OUT_CLIENT_CERT_PATH: "./secrets/servercert.pem"
+  OUT_CLIENT_KEY_PATH: "./secrets/serverkey.pem"
+  CACHE_HOST: "localhost"
+  CACHE_PORT: "6379"
+  PEER_ENDPOINT: "inbound-lewbank1.moja-box.vessels.tech"
+  BACKEND_ENDPOINT: "localhost:4102/adapter"
+  DFSP_ID: "lewbank2"
+  ILP_SECRET: "Quaixohyaesahju3thivuiChai5cahng"
+  EXPIRY_SECONDS: "60"
+  AUTO_ACCEPT_QUOTES: "true"
+  CHECK_ILP: "false"
+  ENABLE_TEST_FEATURES: "false"
+  WS02_BEARER_TOKEN: "7718fa9b-be13-3fe7-87f0-a12cf1628168"
