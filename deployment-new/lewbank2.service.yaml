@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lewbank1-service
+spec:
+  selector:
+    app: lewbank1
+  ports:
+    - protocol: TCP
+      name: outbound
+      port: 4000
+      targetPort: 4000
+    - protocol: TCP
+      name: inbound
+      port: 4001
+      targetPort: 4001
+    - protocol: TCP
+      name: public-api
+      port: 4002
+      targetPort: 4002
