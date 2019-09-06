@@ -16,7 +16,7 @@ spec:
       labels:
         app: lewbank2
     spec:
-     volumes:
+      volumes:
         - name: lewbank2-storage
           persistentVolumeClaim:
             claimName: lewbank2-volume-claim
