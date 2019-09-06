@@ -19,6 +19,7 @@ import Config from './service/config';
 import Logger from './service/logger';
 import AccountStore from './service/AccountStore'
 import SimplePositionStore from './service/SimplePositionStore'
+import SimpleTransactionLog from './service/SimpleTransactionLog';
 import { HttpError } from './util/AppProviderTypes'
 
 
@@ -38,6 +39,7 @@ async function initServer() {
 
   const accountStore = new AccountStore(mongoClient.db())
   const positionStore = new SimplePositionStore(mongoClient.db(), Config.INITIAL_POSITION)
+  const txLog = new SimpleTransactionLog(mongoClient.db())
 
   /* Register Routes */
   api
@@ -76,6 +78,7 @@ async function initServer() {
     .use(async (ctx, next) => {
       ctx.state.accountStore = accountStore;
       ctx.state.positionStore = positionStore;
+      ctx.state.txLog = txLog;
 
       await next()
     })

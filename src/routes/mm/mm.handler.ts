@@ -9,6 +9,7 @@ import {
 } from '../../util/AppProviderTypes';
 import { Account } from '../../model/Account';
 import SimplePositionStore from '../../service/SimplePositionStore';
+import SimpleTransactionLog from '../../service/SimpleTransactionLog';
 
 /**
  * Utility method to build a set of headers required by the SDK outbound API
@@ -73,6 +74,8 @@ export async function registerAccount(ctx: Context) {
 export async function transfer(ctx: Context) {
   const accountStore: AccountStore = ctx.state.accountStore;
   const positionStore: SimplePositionStore = ctx.state.positionStore;
+  const txLog: SimpleTransactionLog = ctx.state.positionStore;
+
 
   console.log("transfer request.body", ctx.request.body)
 
@@ -136,6 +139,10 @@ export async function transfer(ctx: Context) {
 
   /* Deduct from the DFSP's Position */
   positionStore.changePosition(amountNum * -1)
+
+  /* Add to the tx log */
+  //TODO: double check the format we are saving
+  txLog.appendTransaction(options.body);
 
 
   /* Response */

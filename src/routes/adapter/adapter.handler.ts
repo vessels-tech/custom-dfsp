@@ -9,6 +9,7 @@ import {
 import AccountStore from '../../service/AccountStore';
 import SimplePositionStore from '../../service/SimplePositionStore';
 import { httpUnwrap } from '../../util/AppProviderTypes';
+import SimpleTransactionLog from '../../service/SimpleTransactionLog';
 
 export async function getParticipants(ctx: Context) {
   
@@ -63,6 +64,8 @@ export async function postQuoteRequests(ctx: Context) {
 export async function postTransfers(ctx: Context) {
   const accountStore: AccountStore = ctx.state.accountStore;
   const positionStore: SimplePositionStore = ctx.state.positionStore;
+  const txLog: SimpleTransactionLog = ctx.state.txLog;
+
   const { transferId, to: { idValue }, amount } = ctx.request.body
 
   const amountNum = parseFloat(amount)
@@ -73,6 +76,8 @@ export async function postTransfers(ctx: Context) {
   /* Increment the position (other dfsp owes us now!)*/
   positionStore.changePosition(amountNum)
 
+  /* Save the tx to the tx Log */
+  txLog.appendTransaction(ctx.request.body)
 
   const response: TransferResponse = {
     //I'm not sure if this is correct, but it's ok for now

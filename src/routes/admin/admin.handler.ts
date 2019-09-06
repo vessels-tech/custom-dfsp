@@ -1,7 +1,8 @@
 import { Context } from 'koa'
 import AccountStore from '../../service/AccountStore';
 import SimplePositionStore from '../../service/SimplePositionStore';
-import { unsafeUnwrap, ResultType } from '../../util/AppProviderTypes';
+import { unsafeUnwrap, ResultType, httpUnwrap } from '../../util/AppProviderTypes';
+import SimpleTransactionLog from '../../service/SimpleTransactionLog';
 
 export async function getAccounts(ctx: Context) {
   const accountStore: AccountStore = ctx.state.accountStore;
@@ -46,5 +47,26 @@ export async function getPosition(ctx: Context) {
   ctx.body = { 
     statusCode: 200,
     position: await positionStore.getPosition()
+  }
+}
+
+
+/**
+ * @function getTransactions
+ * 
+ * @description Get the list of transactions
+ * 
+ * @param ctx 
+ */
+
+export async function getTransactions(ctx: Context) {
+  const txLog: SimpleTransactionLog = ctx.state.transactionLog;
+
+  const transactions = httpUnwrap(await txLog.getTransactionList())
+
+  ctx.status = 200
+  ctx.body = {
+    statusCode: 200,
+    transactions: transactions
   }
 }
