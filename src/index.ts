@@ -6,6 +6,8 @@ import koaConvert from 'koa-convert'
 import helmet from 'koa-helmet'
 import views from 'koa-views'
 import morgan from 'koa-morgan'
+import koaStatic from 'koa-static'
+import koaMount from 'koa-mount'
 import path from 'path'
 import { MongoClient } from 'mongodb'
 
@@ -16,6 +18,7 @@ const koa404Handler = require('koa-404-handler');
 import { healthCheckRouter } from './routes/healthCheck/healthCheck.routes'
 import { mmRouter } from './routes/mm/mm.routes'
 import { adminRouter } from './routes/admin/admin.routes';
+import { templateRouter } from './routes/template/template.routes';
 import adapterRouter  from './routes/adapter/adapter.routes'
 import Config from './service/config';
 import Logger from './service/logger';
@@ -37,10 +40,24 @@ async function initServer() {
   const mongoClient = await MongoClient.connect(mongoUrl)
   // var collection = mongoClient.db().collection('documents');
   // console.log("collection is", collection)
-
   const accountStore = new AccountStore(mongoClient.db())
   const positionStore = new SimplePositionStore(mongoClient.db(), Config.INITIAL_POSITION)
   const txLog = new SimpleTransactionLog(mongoClient.db())
+
+
+  // This is a less than ideal place, but it's what Typescript dictates
+
+
+  /* Public Files */
+  app.use(koaMount('/public', koaStatic(path.join(__dirname, '/../public'))))
+
+  /* Template Rendering */
+  app.use(views(path.join(__dirname, '/../views'), { extension: 'ejs' }))
+
+  // TODO: move this elsewhere
+  // const templateRouter = require("koa-router")();
+  // templateRouter.get('/', async (ctx: any) => await ctx.render('index', { user }));
+  // templateRouter.get('/login', async (ctx: any) => await ctx.render('login', { user }));
 
   /* Register API Routes */
   api
@@ -48,32 +65,8 @@ async function initServer() {
     .use('/admin', adminRouter.routes()) //Temp mobile money api test
     .use('/mm', mmRouter.routes()) //Temp mobile money api test
     .use('/adapter', adapterRouter.routes()) //handle callbacks from the scheme-adapter
+    .use('/app', templateRouter.routes())
 
-  /* Register Static Pages TODO: move this to separate route?*/
-
-  // api.use(views(__dirname + '/routes/static/views', {
-  //   map: {
-  //     html: 'underscore'
-  //   }
-  // }));
-
-  // This is a less than ideal place, but it's what Typescript dictates
-  app.use(views(path.join(__dirname, '/../views'), { extension: 'ejs' }));
-
-  const user = {
-    name: {
-      first: 'Tobi',
-      last: 'Holowaychuk'
-    },
-    species: 'ferret',
-    age: 3
-  };
-
-  // TODO: add a 404
-  app.use(async function (ctx) {
-    await ctx.render('index', { user });
-    // await ctx.render('user', { user });
-  });
 
   /* Override Koa's Error Handler*/
   app.context.onerror = errorHandler;
