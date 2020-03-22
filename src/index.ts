@@ -4,7 +4,9 @@ import KoaRouter from 'koa-router'
 import bodyParser from 'koa-body'
 import koaConvert from 'koa-convert'
 import helmet from 'koa-helmet'
+import views from 'koa-views'
 import morgan from 'koa-morgan'
+import path from 'path'
 import { MongoClient } from 'mongodb'
 
 //TODO: find/write types for these
@@ -26,7 +28,6 @@ import { HttpError } from './util/AppProviderTypes'
 const app = new Koa();
 const api = new KoaRouter()
 
-
 async function initServer() {
 
   /* State */
@@ -41,12 +42,38 @@ async function initServer() {
   const positionStore = new SimplePositionStore(mongoClient.db(), Config.INITIAL_POSITION)
   const txLog = new SimpleTransactionLog(mongoClient.db())
 
-  /* Register Routes */
+  /* Register API Routes */
   api
     .use('/health', healthCheckRouter.routes())
     .use('/admin', adminRouter.routes()) //Temp mobile money api test
     .use('/mm', mmRouter.routes()) //Temp mobile money api test
     .use('/adapter', adapterRouter.routes()) //handle callbacks from the scheme-adapter
+
+  /* Register Static Pages TODO: move this to separate route?*/
+
+  // api.use(views(__dirname + '/routes/static/views', {
+  //   map: {
+  //     html: 'underscore'
+  //   }
+  // }));
+
+  // This is a less than ideal place, but it's what Typescript dictates
+  app.use(views(path.join(__dirname, '/../views'), { extension: 'ejs' }));
+
+  const user = {
+    name: {
+      first: 'Tobi',
+      last: 'Holowaychuk'
+    },
+    species: 'ferret',
+    age: 3
+  };
+
+  // TODO: add a 404
+  app.use(async function (ctx) {
+    await ctx.render('index', { user });
+    // await ctx.render('user', { user });
+  });
 
   /* Override Koa's Error Handler*/
   app.context.onerror = errorHandler;

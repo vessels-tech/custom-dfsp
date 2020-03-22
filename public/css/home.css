@@ -1,0 +1,28 @@
+@import 'bulma.min.css';
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Thasadith');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+body,
+html {
+    font-family: Montserrat,
+        'Times New Roman',
+        Times,
+        serif
+}
+
+#full-height {
+    height: 95vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    /* background: #ccc; */
+}
+
+.is-custom-primary {
+    background: #eeeeee;
+}
+
+#loginForm {
+    width: 35%;
+}

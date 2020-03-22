@@ -7,6 +7,8 @@ services:
   # DB for 
   mongodb:
     image: mongo
+    ports:
+      - "27017:27017"
 
   scheme-adapter:
     image: mojaloop/sdk-scheme-adapter:v9.4.0

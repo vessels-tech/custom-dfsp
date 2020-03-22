@@ -1,6 +1,6 @@
 import rc from 'rc'
 const fs = require('fs')
-const configFile = require(`${__dirname}/../../config/${process.env.CONFIG_FILENAME}`)
+const configFile = require(`${__dirname}/../../config/${process.env.CONFIG_FILENAME || 'default.js'}`)
 
 /* Override variables by setting env vars with the prefix DFSP_ */
 const PREFIX = "DFSP"
