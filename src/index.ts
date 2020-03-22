@@ -45,19 +45,11 @@ async function initServer() {
   const txLog = new SimpleTransactionLog(mongoClient.db())
 
 
-  // This is a less than ideal place, but it's what Typescript dictates
-
-
   /* Public Files */
   app.use(koaMount('/public', koaStatic(path.join(__dirname, '/../public'))))
 
   /* Template Rendering */
   app.use(views(path.join(__dirname, '/../views'), { extension: 'ejs' }))
-
-  // TODO: move this elsewhere
-  // const templateRouter = require("koa-router")();
-  // templateRouter.get('/', async (ctx: any) => await ctx.render('index', { user }));
-  // templateRouter.get('/login', async (ctx: any) => await ctx.render('login', { user }));
 
   /* Register API Routes */
   api
@@ -66,7 +58,6 @@ async function initServer() {
     .use('/mm', mmRouter.routes()) //Temp mobile money api test
     .use('/adapter', adapterRouter.routes()) //handle callbacks from the scheme-adapter
     .use('/app', templateRouter.routes())
-
 
   /* Override Koa's Error Handler*/
   app.context.onerror = errorHandler;

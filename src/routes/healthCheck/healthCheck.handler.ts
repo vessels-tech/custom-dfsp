@@ -1,5 +1,5 @@
-// import { KoaHelmet } from 'koa-helmet';
-import { BaseContext } from 'koa'
+
+import { RouterContext } from 'koa-router';
 
 // const { getArbitraryData } = require('../../services/arbitrary-data.service.js');
 // const { logger } = require('../../services/logger');
@@ -9,7 +9,7 @@ import { BaseContext } from 'koa'
  * properly. Typically a load balancer will stop directing traffic to unhealthy
  * nodes automatically.
  */
-async function shallow(ctx: BaseContext) {
+async function shallow(ctx: RouterContext) {
   ctx.body = { healthy: true };
 }
 

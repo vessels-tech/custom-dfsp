@@ -10,6 +10,7 @@ import {
 import { Account } from '../../model/Account';
 import SimplePositionStore from '../../service/SimplePositionStore';
 import SimpleTransactionLog from '../../service/SimpleTransactionLog';
+import { RouterContext } from 'koa-router';
 
 /**
  * Utility method to build a set of headers required by the SDK outbound API
@@ -27,7 +28,7 @@ const buildHeaders = () => {
   return headers;
 };
 
-export async function getAccount(ctx: Context) {
+export async function getAccount(ctx: RouterContext) {
   const { idValue } = ctx.params; //we ignore the id type for now
   const accountStore: AccountStore = ctx.state.accountStore;
   
@@ -44,7 +45,7 @@ export async function getAccount(ctx: Context) {
  * 
  * @description Tell the switch to register an account with this dfsp
  */
-export async function registerAccount(ctx: Context) {
+export async function registerAccount(ctx: RouterContext) {
   const { idType, idValue, name, funds } = ctx.request.body;
   //TODO: validate
   const accountStore: AccountStore = ctx.state.accountStore;
@@ -71,7 +72,7 @@ export async function registerAccount(ctx: Context) {
  * @description Transfer funds from our account to another
  * @param ctx 
  */
-export async function transfer(ctx: Context) {
+export async function transfer(ctx: RouterContext) {
   const accountStore: AccountStore = ctx.state.accountStore;
   const positionStore: SimplePositionStore = ctx.state.positionStore;
   const txLog: SimpleTransactionLog = ctx.state.positionStore;

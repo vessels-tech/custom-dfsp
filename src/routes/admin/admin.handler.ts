@@ -3,8 +3,11 @@ import AccountStore from '../../service/AccountStore';
 import SimplePositionStore from '../../service/SimplePositionStore';
 import { unsafeUnwrap, ResultType, httpUnwrap } from '../../util/AppProviderTypes';
 import SimpleTransactionLog from '../../service/SimpleTransactionLog';
+import {  RouterContext } from 'koa-router';
 
-export async function getAccounts(ctx: Context) {
+// export async function getAccounts(ctx: Context) {
+
+export async function getAccounts(ctx: RouterContext) {
   const accountStore: AccountStore = ctx.state.accountStore;
   const accounts = unsafeUnwrap(await accountStore.getAccounts())
 
@@ -15,7 +18,7 @@ export async function getAccounts(ctx: Context) {
 }
 
 //Add funds to users account
-export async function cashIn(ctx: Context) {
+export async function cashIn(ctx: RouterContext) {
   const { idValue } = ctx.params;
   const { amount } = ctx.request.body;
   const accountStore: AccountStore = ctx.state.accountStore;
@@ -40,7 +43,7 @@ export async function cashIn(ctx: Context) {
 }
 
 //Get the position of this dfsp. Not sure how this works without a central switch
-export async function getPosition(ctx: Context) {
+export async function getPosition(ctx: RouterContext) {
   const positionStore: SimplePositionStore = ctx.state.positionStore;
 
   ctx.status = 200

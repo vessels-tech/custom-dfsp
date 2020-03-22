@@ -10,8 +10,9 @@ import AccountStore from '../../service/AccountStore';
 import SimplePositionStore from '../../service/SimplePositionStore';
 import { httpUnwrap } from '../../util/AppProviderTypes';
 import SimpleTransactionLog from '../../service/SimpleTransactionLog';
+import { RouterContext } from 'koa-router';
 
-export async function getParticipants(ctx: Context) {
+export async function getParticipants(ctx: RouterContext) {
   
   //TODO: move validation logic elsewhere
   /*
@@ -27,7 +28,7 @@ export async function getParticipants(ctx: Context) {
   ctx.body = response
 }
 
-export async function getParties(ctx: Context) {
+export async function getParties(ctx: RouterContext) {
   const { idValue } = ctx.params;
   const accountStore: AccountStore = ctx.state.accountStore;
 
@@ -43,7 +44,7 @@ export async function getParties(ctx: Context) {
   ctx.status = 200
 }
 
-export async function postQuoteRequests(ctx: Context) {
+export async function postQuoteRequests(ctx: RouterContext) {
   const {
     quoteId,
     transactionId,
@@ -61,7 +62,7 @@ export async function postQuoteRequests(ctx: Context) {
   ctx.body = response
 }
 
-export async function postTransfers(ctx: Context) {
+export async function postTransfers(ctx: RouterContext) {
   const accountStore: AccountStore = ctx.state.accountStore;
   const positionStore: SimplePositionStore = ctx.state.positionStore;
   const txLog: SimpleTransactionLog = ctx.state.txLog;
