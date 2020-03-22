@@ -1,27 +1,24 @@
 version: "3.7"
 services:
-  # DB for scheme-adapter
   redis:
     image: redis:5.0.4-alpine
 
-  # DB for 
   mongodb:
     image: mongo
 
   scheme-adapter:
-    image: mojaloop/sdk-scheme-adapter:v9.4.0
+    image: ${REPO}/sdk-scheme-adapter:${VER}
+    build:
+      context: ../sdk-scheme-adapter
     env_file: ./config/scheme-adapter.lewbank1.env
-    # volumes:
-    #   - ../sdk-scheme-adapter/package.json:/opt/sdk-scheme-adapter/package.json
-    #   - ../sdk-scheme-adapter/src:/opt/sdk-scheme-adapter/src
+    volumes:
+      - ../sdk-scheme-adapter/package.json:/opt/sdk-scheme-adapter/package.json
+      - ../sdk-scheme-adapter/src:/opt/sdk-scheme-adapter/src
     depends_on:
       - redis
-    ports:
-      - "4000:4000"
-    # command:
-      # - npm run docker-dev
+    command:
+      - npm run docker-dev
   
-  # Maybe we can run this locally instead of inside of docker for debugging?
   sheet-fsp:
     image: ${REPO}/sheet-fsp:${VER}
     build:
