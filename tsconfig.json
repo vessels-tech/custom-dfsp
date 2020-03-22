@@ -1,6 +1,7 @@
 {
   "include": [
     "src"
+    
   ],
   "exclude": [
     "node_modules",
@@ -10,6 +11,9 @@
     "coverage"
   ],
   "compilerOptions": {
+    "types": [
+      "node"
+    ],
     "target": "es2018",
     "module": "commonjs",
     "lib": [

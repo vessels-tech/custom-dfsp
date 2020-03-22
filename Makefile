@@ -28,12 +28,15 @@ dev:
 ##
 start:
 	# Use the -p flag to run multiple docker composes at once
-	REPO=${REPO} VER=${VER} docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 up -d
-	REPO=${REPO} VER=${VER} docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 up -d
+	REPO=${REPO} VER=${VER} docker-compose -f docker-compose-base.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 up -d
+	REPO=${REPO} VER=${VER} docker-compose -f docker-compose-base.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 up -d
+
+start-deps:
+	docker-compose up redis mongodb scheme-adapter
 
 stop:
-	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 stop
-	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 stop
+	docker-compose -f docker-compose-base.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 stop
+	docker-compose -f docker-compose-base.yml -f ./config/docker-compose.lewbank2.yml -p lewbank2 stop
 
 logs-lewbank1:
 	docker-compose -f docker-compose.yml -f ./config/docker-compose.lewbank1.yml -p lewbank1 logs -f sheet-fsp scheme-adapter 
