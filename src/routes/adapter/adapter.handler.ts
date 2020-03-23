@@ -1,5 +1,3 @@
-import { Context } from 'koa'
-
 import { 
   ParticipantsResponse, 
   TransferParty, 

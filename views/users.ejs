@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Demo DFSP</title>
+  <link rel="stylesheet" href="/public/css/home.css">
+</head>
+
+<body>
+  <%- include('partials/navbar.ejs') -%>
+  <div id="wrapper">
+      <main class="column main">
+        <nav class="breadcrumb is-small" aria-label="breadcrumbs">
+          <ul>
+            <li><a href="../app">Home</a></li>
+            <li class="is-active"><a href="#" aria-current="page">Users</a></li>
+          </ul>
+        </nav>
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="title">Users</div>
+            </div>
+          </div>
+          <!-- <div class="level-right">
+            <div class="level-item"><button type="button" class="button is-small">March 8, 2017 - April 6, 2017</button></div>
+          </div> -->
+        </div>
+        <div class="columns is-multiline">
+          <div class="column">
+            <table class="table is-bordered is-striped is-narrow is-fullwidth">
+              <thead>
+                <tr>
+                  <th><abbr title="MSISDN">MSISDN</abbr></th>
+                  <th>Name</th>
+                  <th>Balance</th>
+                  <!-- <th><abbr title="Won">W</abbr></th>
+                  <th><abbr title="Drawn">D</abbr></th>
+                  <th><abbr title="Lost">L</abbr></th>
+                  <th><abbr title="Goals for">GF</abbr></th>
+                  <th><abbr title="Goals against">GA</abbr></th>
+                  <th><abbr title="Goal difference">GD</abbr></th>
+                  <th><abbr title="Points">Pts</abbr></th> -->
+                  <!-- <th>Qualification or relegation</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <% users.forEach(function(user){ %>
+                  <tr>
+                    <th><%= user.msisdn %></th>
+                    <th><%= `${user.name.last}, ${user.name.first}` %></th>
+                    <td><%= user.balance %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+            <!-- <nav class="pagination is-centered" role="navigation" aria-label="pagination"><a
+                class="pagination-previous">Previous</a> <a class="pagination-next">Next page</a>
+              <ul class="pagination-list">
+                <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+                <li><span class="pagination-ellipsis">…</span></li>
+                <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+                <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+                <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+                <li><span class="pagination-ellipsis">…</span></li>
+                <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+              </ul>
+            </nav> -->
+          </div>
+        </div>
+      </main>
+  </div>
+</body>
+</html>

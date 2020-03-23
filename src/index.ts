@@ -46,7 +46,7 @@ async function initServer() {
 
 
   /* Public Files */
-  app.use(koaMount('/public', koaStatic(path.join(__dirname, '/../public'))))
+  app.use(koaMount('/public', koaStatic(path.join(__dirname, '/../views/public'))))
 
   /* Template Rendering */
   app.use(views(path.join(__dirname, '/../views'), { extension: 'ejs' }))
